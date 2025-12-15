@@ -1,0 +1,9 @@
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.csproj.AssemblyReference.cache
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/rpswa.dswa.cache.json
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.GeneratedMSBuildEditorConfig.editorconfig
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.AssemblyInfoInputs.cache
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.AssemblyInfo.cs
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.csproj.CoreCompileInputs.cache
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.MvcApplicationPartsAssemblyInfo.cache
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.RazorAssemblyInfo.cache
+/home/shogo/myproduct/GraphDatabase/Backend/obj/Debug/net9.0/GraphDatabase.RazorAssemblyInfo.cs
