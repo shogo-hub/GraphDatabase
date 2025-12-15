@@ -1,4 +1,4 @@
-namespace Backend.Common.Errors;
+namespace Backend.Common.Errors.Types;
 
 /// <summary>
 /// Abstract class for Error Model classes

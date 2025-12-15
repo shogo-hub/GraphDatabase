@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GraphDatabase")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9dbcd67bb33ac81ec889a2797d3c178afbe7e584")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f69a447c5e714da67c89a9f0c0397525863ca87b")]
 [assembly: System.Reflection.AssemblyProductAttribute("GraphDatabase")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GraphDatabase")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

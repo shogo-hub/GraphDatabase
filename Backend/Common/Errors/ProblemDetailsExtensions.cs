@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Common.Errors.AspNetCore;
+namespace Backend.Common.Errors;
 
 public static class ProblemDetailsExtensions
 {

@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Immutable;
+using Backend.Common.Errors.Types;
 
-namespace Backend.Common.Errors.AspNetCore;
+namespace Backend.Common.Errors;
 
 /// <summary>
 /// Extension helpers for <see cref="IProblemDetailsFactory"/>.

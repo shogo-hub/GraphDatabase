@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
+using Backend.Common.Errors.Types;
 
-namespace Backend.Common.Errors.AspNetCore;
+namespace Backend.Common.Errors;
 
 internal sealed class ProblemDetailsFactory(IOptions<ErrorsOptions> options) : IProblemDetailsFactory
 {

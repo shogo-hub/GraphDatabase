@@ -1,4 +1,4 @@
-namespace Backend.Common.Errors;
+namespace Backend.Common.Errors.Types;
 
 public sealed class AuthenticationFailedError : Error
 {

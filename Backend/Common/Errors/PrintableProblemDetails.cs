@@ -2,7 +2,7 @@ using Backend.Common.Serialization.Json;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace Backend.Common.Errors.AspNetCore;
+namespace Backend.Common.Errors;
 
 /// <summary>
 /// A <see cref="ProblemDetails"/> that provides a JSON representation when converted to string.
