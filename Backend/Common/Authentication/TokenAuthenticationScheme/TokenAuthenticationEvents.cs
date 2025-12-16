@@ -1,9 +1,12 @@
 namespace Backend.Common.Authentication.TokenAuthenticationScheme;
 
+/// <summary>
+///  Holds callback delegates that the authentication handler invokes at lifecycle points.
+/// </summary>
 public class TokenAuthenticationEvents
 {
     /// <summary>
-    /// Delegate invoked when an authentication challenge occurs (for example,
+    /// Delegate(The variable which lambda function is assigned) with setter/getter
     /// when authentication is required but missing or invalid).
     /// </summary>
     /// <remarks>

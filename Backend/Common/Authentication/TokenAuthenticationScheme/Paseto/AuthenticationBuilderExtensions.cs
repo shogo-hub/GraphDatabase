@@ -14,9 +14,11 @@ public static class AuthenticationBuilderExtensions
         Action<PasetoTokenOptions>? configurePasetoTokenOptions,
         Action<CookieTokenAccessorOptions>? configureCookieTokenAccessorOptions)
     {
+        // 1. 
         builder.Services.Configure(configurePasetoTokenOptions ?? delegate { });
         builder.Services.Configure(configureCookieTokenAccessorOptions ?? delegate { });
-
+        
+        // Add Cookie / Pasetto function as a singleton
         builder.Services
             .AddSingleton<ITokenAccessor, CookieTokenAccessor>()
             .AddSingleton<ITokenParser, PasetoTokenParser>()

@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "BouncyCastle.Cryptography/2.5.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/BouncyCastle.Cryptography.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/BouncyCastle.Cryptography.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MediatR/14.0.0": {
         "type": "package",
         "dependencies": {
@@ -145,6 +158,32 @@
           }
         }
       },
+      "NaCl.Core/2.0.6": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/NaCl.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/NaCl.Core.dll": {}
+        }
+      },
+      "Paseto.Core/1.4.1": {
+        "type": "package",
+        "dependencies": {
+          "BouncyCastle.Cryptography": "2.5.1",
+          "NaCl.Core": "2.0.6"
+        },
+        "compile": {
+          "lib/net8.0/Paseto.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Paseto.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
       "System.Diagnostics.DiagnosticSource/10.0.0": {
         "type": "package",
         "compile": {
@@ -164,6 +203,26 @@
     }
   },
   "libraries": {
+    "BouncyCastle.Cryptography/2.5.1": {
+      "sha512": "zy8TMeTP+1FH2NrLaNZtdRbBdq7u5MI+NFZQOBSM69u5RFkciinwzV2eveY6Kjf5MzgsYvvl6kTStsj3JrXqkg==",
+      "type": "package",
+      "path": "bouncycastle.cryptography/2.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "bouncycastle.cryptography.2.5.1.nupkg.sha512",
+        "bouncycastle.cryptography.nuspec",
+        "lib/net461/BouncyCastle.Cryptography.dll",
+        "lib/net461/BouncyCastle.Cryptography.xml",
+        "lib/net6.0/BouncyCastle.Cryptography.dll",
+        "lib/net6.0/BouncyCastle.Cryptography.xml",
+        "lib/netstandard2.0/BouncyCastle.Cryptography.dll",
+        "lib/netstandard2.0/BouncyCastle.Cryptography.xml",
+        "packageIcon.png"
+      ]
+    },
     "MediatR/14.0.0": {
       "sha512": "r5fwUO6NBvOFKaiMRx/gRrD1MEHHOio5yEdzSLs2OMeD2e9ZKnZaBQM6A6vVBEWJF4VY41vplXmDMOY1YvpqNA==",
       "type": "package",
@@ -414,6 +473,43 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
+    "NaCl.Core/2.0.6": {
+      "sha512": "J8co7cuJYhFssqG2IlwT/v1WHx17kx9wK4XZjYlzRwEQVAKV+Bja02BBmqMobbpCsWIQvhvmLuJsYPjm9uh3xQ==",
+      "type": "package",
+      "path": "nacl.core/2.0.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net45/NaCl.Core.dll",
+        "lib/net48/NaCl.Core.dll",
+        "lib/net481/NaCl.Core.dll",
+        "lib/net6.0/NaCl.Core.dll",
+        "lib/net8.0/NaCl.Core.dll",
+        "lib/net9.0/NaCl.Core.dll",
+        "lib/netcoreapp3.1/NaCl.Core.dll",
+        "lib/netstandard2.0/NaCl.Core.dll",
+        "lib/netstandard2.1/NaCl.Core.dll",
+        "nacl.core.2.0.6.nupkg.sha512",
+        "nacl.core.nuspec"
+      ]
+    },
+    "Paseto.Core/1.4.1": {
+      "sha512": "MNHCuiMCuCjqXYc+tWhDZI2ndXR+lNHx4LuxOFnevS/QbeuW3ZmCNWhDMgIs3Kd82JRZzYs/uLR5bSoBERxmDg==",
+      "type": "package",
+      "path": "paseto.core/1.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Paseto.dll",
+        "lib/net6.0/Paseto.pdb",
+        "lib/net8.0/Paseto.dll",
+        "lib/net8.0/Paseto.pdb",
+        "paseto.core.1.4.1.nupkg.sha512",
+        "paseto.core.nuspec"
+      ]
+    },
     "System.Diagnostics.DiagnosticSource/10.0.0": {
       "sha512": "0KdBK+h7G13PuOSC2R/DalAoFMvdYMznvGRuICtkdcUMXgl/gYXsG6z4yUvTxHSMACorWgHCU1Faq0KUHU6yAQ==",
       "type": "package",
@@ -446,7 +542,8 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "MediatR >= 14.0.0",
-      "MediatR.Extensions.Microsoft.DependencyInjection >= 11.1.0"
+      "MediatR.Extensions.Microsoft.DependencyInjection >= 11.1.0",
+      "Paseto.Core >= 1.4.1"
     ]
   },
   "packageFolders": {
@@ -499,6 +596,10 @@
           "MediatR.Extensions.Microsoft.DependencyInjection": {
             "target": "Package",
             "version": "[11.1.0, )"
+          },
+          "Paseto.Core": {
+            "target": "Package",
+            "version": "[1.4.1, )"
           }
         },
         "imports": [

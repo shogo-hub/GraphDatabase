@@ -51,6 +51,10 @@
             "MediatR.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[11.1.0, )"
+            },
+            "Paseto.Core": {
+              "target": "Package",
+              "version": "[1.4.1, )"
             }
           },
           "imports": [
