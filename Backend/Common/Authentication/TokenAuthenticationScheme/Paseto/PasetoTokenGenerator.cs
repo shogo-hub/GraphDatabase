@@ -47,7 +47,7 @@ internal sealed class PasetoTokenGenerator : ITokenGenerator
         var accessToken = builder
             .IssuedAt(issuedAt)
             .NotBefore(issuedAt.AddMinutes(-5))
-            .Expiration(issuedAt.Add(_options.Value.Exipration))
+            .Expiration(issuedAt.Add(_options.Value.Expiration))
             .AddFooter(Guid.NewGuid().ToString())
             .Encode();
 
