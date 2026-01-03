@@ -1,0 +1,72 @@
+using Backend.Application.Rag.PromptCreator;
+using Backend.Application.Rag.AIModelProvider;
+using Backend.Common.Errors;
+using Backend.Common.Miscellaneous;
+using Backend.WebApi.RagIntegration.Models;
+using Microsoft.Extensions.Logging;
+
+/*Main business logic for Rag system*/ 
+namespace Backend.Application.Rag;
+
+/// <summary>
+/// Implementation of <see cref="IRagService"/> that orchestrates prompt rendering and AI queries.
+/// </summary>
+internal sealed class RagService : IRagService
+{
+    private readonly AIProviderFactory _prociderFactory;
+    private readonly IPromptTemplateService _promptTemplate;
+    private readonly ILogger<RagService> _logger;
+
+    public RagService(
+        AIProviderFactory prociderFactory,
+        IPromptTemplateService promptTemplate,
+        ILogger<RagService> logger)
+    {
+        _prociderFactory = prociderFactory;
+        _promptTemplate = promptTemplate;
+        _logger = logger;
+    }
+    ///<summary>
+    /// Render into prompt from user question and query to AI
+    ///</summary>
+    public async Task<TryResult<RagResultModel, Error>> QueryAsync(RagDomainModel model, CancellationToken cancellationToken = default)
+    {
+        var requestId = Guid.NewGuid().ToString("N")[..8];
+
+        // Render prompt from template
+        var prompt = _promptTemplate.Render(model.TaskType, new
+        {
+            query = model.Query,
+            context = model.Context ?? "No additional context provided."
+        });
+
+        _logger.LogInformation(
+            "RAG query started. RequestId={RequestId}, TaskType={TaskType}, Provider={Provider}, QueryLength={QueryLength}",
+            requestId, model.TaskType, model.Provider, model.Query.Length);
+
+        // Get the appropriate AI client based on provider
+        var clientResult = _prociderFactory.GetClient(model.Provider);
+        if (!clientResult.IsSucceeded)
+        {
+            return TryResult.Fail<Error>(clientResult.Error);
+        }
+
+        var aiClient = clientResult.Value;
+        var aiResponseResult = await aiClient.QueryAsync(prompt, cancellationToken);
+
+        if (!aiResponseResult.IsSucceeded)
+        {
+            return TryResult.Fail<Error>(aiResponseResult.Error);
+        }
+
+        var aiResponse = aiResponseResult.Value;
+
+        _logger.LogInformation(
+            "RAG query completed. RequestId={RequestId}, Provider={Provider}, ResponseLength={ResponseLength}",
+            requestId, model.Provider, aiResponse?.Length ?? 0);
+
+            // Map response to domain model and return success
+        var result = RagMapper.FromAi(aiResponse ?? string.Empty);
+        return TryResult.Succeed(result);
+    }
+}
