@@ -5,9 +5,9 @@ using Backend.Common.Errors;
 using Backend.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Backend.Application.Rag.PromptCreator;
+using Backend.Application.AIChat.PromptCreator;
 
-namespace Backend.Application.Rag.AIModelProvider.OpenAI;
+namespace Backend.Application.AIChat.AIModelProvider.OpenAI;
 
 public sealed class OpenAiClient : IAiClient
 {

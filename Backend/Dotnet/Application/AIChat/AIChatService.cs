@@ -1,26 +1,26 @@
-using Backend.Application.Rag.PromptCreator;
-using Backend.Application.Rag.AIModelProvider;
+using Backend.Application.AIChat.PromptCreator;
+using Backend.Application.AIChat.AIModelProvider;
 using Backend.Common.Errors;
 using Backend.Common.Miscellaneous;
-using Backend.WebApi.RagIntegration.Models;
+using Backend.WebApi.AIChatIntegration.Models;
 using Microsoft.Extensions.Logging;
 
-/*Main business logic for Rag system*/ 
-namespace Backend.Application.Rag;
+/*Main business logic for AIChat system*/ 
+namespace Backend.Application.AIChat;
 
 /// <summary>
-/// Implementation of <see cref="IRagService"/> that orchestrates prompt rendering and AI queries.
+/// Implementation of <see cref="IAIChatService"/> that orchestrates prompt rendering and AI queries.
 /// </summary>
-internal sealed class RagService : IRagService
+internal sealed class AIChatService : IAIChatService
 {
     private readonly AIProviderFactory _prociderFactory;
     private readonly IPromptTemplateService _promptTemplate;
-    private readonly ILogger<RagService> _logger;
+    private readonly ILogger<AIChatService> _logger;
 
-    public RagService(
+    public AIChatService(
         AIProviderFactory prociderFactory,
         IPromptTemplateService promptTemplate,
-        ILogger<RagService> logger)
+        ILogger<AIChatService> logger)
     {
         _prociderFactory = prociderFactory;
         _promptTemplate = promptTemplate;
@@ -29,7 +29,7 @@ internal sealed class RagService : IRagService
     ///<summary>
     /// Render into prompt from user question and query to AI
     ///</summary>
-    public async Task<TryResult<RagResultModel, Error>> QueryAsync(RagDomainModel model, CancellationToken cancellationToken = default)
+    public async Task<TryResult<AIChatResultModel, Error>> QueryAsync(AIChatDomainModel model, CancellationToken cancellationToken = default)
     {
         var requestId = Guid.NewGuid().ToString("N")[..8];
 
@@ -41,7 +41,7 @@ internal sealed class RagService : IRagService
         });
 
         _logger.LogInformation(
-            "RAG query started. RequestId={RequestId}, TaskType={TaskType}, Provider={Provider}, QueryLength={QueryLength}",
+            "AIChat query started. RequestId={RequestId}, TaskType={TaskType}, Provider={Provider}, QueryLength={QueryLength}",
             requestId, model.TaskType, model.Provider, model.Query.Length);
 
         // Get the appropriate AI client based on provider
@@ -62,11 +62,11 @@ internal sealed class RagService : IRagService
         var aiResponse = aiResponseResult.Value;
 
         _logger.LogInformation(
-            "RAG query completed. RequestId={RequestId}, Provider={Provider}, ResponseLength={ResponseLength}",
+            "AIChat query completed. RequestId={RequestId}, Provider={Provider}, ResponseLength={ResponseLength}",
             requestId, model.Provider, aiResponse?.Length ?? 0);
 
             // Map response to domain model and return success
-        var result = RagMapper.FromAi(aiResponse ?? string.Empty);
+        var result = AIChatMapper.FromAi(aiResponse ?? string.Empty);
         return TryResult.Succeed(result);
     }
 }

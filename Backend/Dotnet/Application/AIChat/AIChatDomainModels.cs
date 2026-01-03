@@ -1,9 +1,9 @@
-namespace Backend.Application.Rag;
+namespace Backend.Application.AIChat;
 
 /// <summary>
-/// Domain model representing a RAG query request.
+/// Domain model representing a AIChat query request.
 /// </summary>
-public sealed record RagDomainModel
+public sealed record AIChatDomainModel
 {
     public required string Query { get; init; }
     public string? Context { get; init; }
@@ -12,9 +12,9 @@ public sealed record RagDomainModel
 }
 
 /// <summary>
-/// Domain model representing a RAG query result.
+/// Domain model representing a AIChat query result.
 /// </summary>
-public sealed record RagResultModel
+public sealed record AIChatResultModel
 {
     public required string Output { get; init; }
 }

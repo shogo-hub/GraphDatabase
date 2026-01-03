@@ -5,9 +5,9 @@ using Backend.Common.Errors;
 using Backend.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Backend.Application.Rag.PromptCreator;
+using Backend.Application.AIChat.PromptCreator;
 
-namespace Backend.Application.Rag.AIModelProvider.OpenRouter;
+namespace Backend.Application.AIChat.AIModelProvider.OpenRouter;
 
 /// <summary>
 /// OpenRouter AI client implementation for testing.

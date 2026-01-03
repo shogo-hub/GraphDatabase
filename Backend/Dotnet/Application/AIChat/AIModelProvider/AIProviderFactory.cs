@@ -2,7 +2,7 @@ using Backend.Common.Errors;
 using Backend.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Application.Rag.AIModelProvider;
+namespace Backend.Application.AIChat.AIModelProvider;
 
 /// <summary>
 /// Factory for selecting the appropriate AI client based on provider name.

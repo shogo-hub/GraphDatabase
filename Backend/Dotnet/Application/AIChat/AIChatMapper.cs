@@ -1,16 +1,16 @@
-using Backend.WebApi.RagIntegration.Models;
+using Backend.WebApi.AIChatIntegration.Models;
 
-namespace Backend.Application.Rag;
+namespace Backend.Application.AIChat;
 
 /// <summary>
-/// Pure, testable mapper for RAG models.
+/// Pure, testable mapper for AIChat models.
 /// </summary>
-internal static class RagMapper
+internal static class AIChatMapper
 {
     /// <summary>
     /// Map API request to domain model.
     /// </summary>
-    public static RagDomainModel ToDomain(RagQueryRequest request) =>
+    public static AIChatDomainModel ToDomain(AIChatQueryRequest request) =>
         new()
         {
             Query = request.Query.Trim(),
@@ -22,7 +22,7 @@ internal static class RagMapper
     /// <summary>
     /// Map AI response string to domain result model.
     /// </summary>
-    public static RagResultModel FromAi(string aiResponse) =>
+    public static AIChatResultModel FromAi(string aiResponse) =>
         new()
         {
             Output = (aiResponse ?? string.Empty).Trim()
