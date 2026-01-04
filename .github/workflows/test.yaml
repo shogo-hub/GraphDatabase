@@ -1,0 +1,26 @@
+name: Test
+on:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # TODO 1 : Using bazel , implement python test too later 
+    # TODO 2 : Either sonar qube or codex to this test pipeline
+    steps:
+      # Step 1
+      - uses: actions/checkout@v4
+      # Step 2 : Install .NET SDK
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      # Step3 : Run the each unit test
+      - name: Test
+        run: dotnet test --logger trx --results-directory test-results
+      # Step 4 : Upload artifact(test-results) to test-results 
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results
+        if: ${{ always() }}
