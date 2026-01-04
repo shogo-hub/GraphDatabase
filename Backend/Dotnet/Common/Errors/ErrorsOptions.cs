@@ -1,4 +1,4 @@
-namespace Backend.Common.Errors;
+namespace Backend.Dotnet.Common.Errors;
 
 /// <summary>
 /// Options for configuring error handling behavior in ASP.NET Core integration.

@@ -1,4 +1,4 @@
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Cookies;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Cookies;
 
 /// <summary>
 /// Configuration options for <see cref="CookieTokenAccessor"/>.

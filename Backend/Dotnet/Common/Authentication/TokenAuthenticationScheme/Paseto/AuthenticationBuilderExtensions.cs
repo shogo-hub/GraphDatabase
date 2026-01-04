@@ -2,7 +2,7 @@ using Backend.Common.Authentication.TokenAuthenticationScheme.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Paseto;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Paseto;
 
 public static class AuthenticationBuilderExtensions
 {

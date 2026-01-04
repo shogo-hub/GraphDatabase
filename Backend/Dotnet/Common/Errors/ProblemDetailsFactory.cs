@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
-using Backend.Common.Errors.Types;
+using Backend.Dotnet.Common.Errors.Types;
 
 namespace Backend.Common.Errors;
 

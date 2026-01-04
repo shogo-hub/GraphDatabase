@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 
 /// <summary>
 /// Represents an immutable authentication token that holds a collection of claims.

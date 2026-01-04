@@ -1,4 +1,4 @@
-namespace Backend.Common.Authentication;
+namespace Backend.Dotnet.Common.Authentication;
 
 public static class KnownClaimTypes
 {

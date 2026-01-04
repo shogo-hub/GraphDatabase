@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Backend.Common.Errors.Types;
-namespace Backend.Common.Errors;
+using Backend.Dotnet.Common.Errors.Types;
+namespace Backend.Dotnet.Common.Errors;
 
 /// <summary>
 /// Factory interface for creating <see cref="ProblemDetails"/> instances from

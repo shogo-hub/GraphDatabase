@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Backend.Common.Errors;
+namespace Backend.Dotnet.Common.Errors;
 
 public static class ServiceCollectionExtensions
 {
