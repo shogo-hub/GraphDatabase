@@ -1,4 +1,4 @@
-namespace Backend.Common.Errors.Types;
+namespace Backend.Dotnet.Common.Errors.Types;
 
 public class ValidationFailedError : Error
 {

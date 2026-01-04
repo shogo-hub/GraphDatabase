@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using Backend.Dotnet.Common.Errors.Types;
 
-namespace Backend.Common.Errors;
+namespace Backend.Dotnet.Common.Errors;
 
 internal sealed class ProblemDetailsFactory(IOptions<ErrorsOptions> options) : IProblemDetailsFactory
 {

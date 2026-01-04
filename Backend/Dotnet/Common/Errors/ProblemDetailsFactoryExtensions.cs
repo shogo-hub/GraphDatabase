@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Immutable;
-using Backend.Common.Errors.Types;
+using Backend.Dotnet.Common.Errors.Types;
 
 namespace Backend.Dotnet.Common.Errors;
 
