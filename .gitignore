@@ -4,3 +4,6 @@
 /.vs/
 *.DotSettings.user
 *.csproj.user
+# ignore test run results
+test-results/
+*.trx
