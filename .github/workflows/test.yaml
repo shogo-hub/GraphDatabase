@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     # TODO 1 : Using bazel , implement python test too later 
-    # TODO 2 : Either sonar qube or codex to this test pipeline
+    # TODO 2 : Either sonar qube/codex to this test pipeline
     steps:
       # Step 1
       - uses: actions/checkout@v4
