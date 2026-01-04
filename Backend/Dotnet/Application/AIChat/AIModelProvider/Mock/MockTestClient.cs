@@ -2,7 +2,7 @@ using Backend.Common.Errors;
 using Backend.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Application.Rag.AIModelProvider.Mock;
+namespace Backend.Application.AIChat.AIModelProvider.Mock;
 
 /// <summary>
 /// Mock implementation of IAiClient for testing without calling external AI services.
