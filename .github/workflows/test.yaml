@@ -14,7 +14,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-      # Step3 : Run the each unit test
+      # Step 3 : Run each unit test
       - name: Restore
         run: dotnet restore Backend/Dotnet/GraphDatabase.sln
 
@@ -22,7 +22,7 @@ jobs:
         run: dotnet build Backend/Dotnet/GraphDatabase.sln --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test Backend/Dotnet.Test/Dotnet.Test.csproj --logger "trx;LogFileName=results.trx" --results-directory test-results --no-build
+        run: dotnet test Backend/Dotnet.Test/Dotnet.Test.csproj --configuration Release --logger "trx;LogFileName=results.trx" --results-directory test-results --no-build
       # Step 4 : Upload artifact(test-results) to test-results 
       - name: Upload test results
         uses: actions/upload-artifact@v4
