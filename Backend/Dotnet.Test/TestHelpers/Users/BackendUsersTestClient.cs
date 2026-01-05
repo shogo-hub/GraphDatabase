@@ -1,5 +1,5 @@
 using Backend.Dotnet.Tests.TestHelpers.Http;
-using Backend.Dotnet.Contoller.Users.Models;
+using Backend.Dotnet.Controller.Users.Models;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Users;
 
