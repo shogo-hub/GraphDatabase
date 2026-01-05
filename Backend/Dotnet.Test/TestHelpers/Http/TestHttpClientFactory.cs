@@ -1,4 +1,4 @@
-using Backend.Common.Authentication.TokenAuthenticationScheme.Cookies;
+using Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Cookies;
 using Microsoft.Net.Http.Headers;
 using System.Net;
 

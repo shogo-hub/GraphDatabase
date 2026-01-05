@@ -1,5 +1,5 @@
 using AutoFixture;
-using Backend.Common.Authentication.TokenAuthenticationScheme.Cookies;
+using Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Cookies;
 using Backend.Dotnet.Tests.TestHelpers;
 using Backend.Dotnet.Tests.TestHelpers.Http;
 using Backend.Dotnet.Tests.TestHelpers.Users;

@@ -1,5 +1,5 @@
-using Backend.Common.Miscellaneous;
-using Backend.Common.Serialization.Json;
+using Backend.Dotnet.Common.Miscellaneous;
+using Backend.Dotnet.Common.Serialization.Json;
 using System.Text.Json;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Http;
