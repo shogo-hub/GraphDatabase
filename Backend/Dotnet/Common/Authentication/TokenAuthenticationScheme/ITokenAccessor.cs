@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 
 /// <summary>
 /// Interface to Get token from response

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Cookies;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Cookies;
 
 /// <summary>
 /// Cookie-based implementation of <see cref="ITokenAccessor"/> that reads and writes

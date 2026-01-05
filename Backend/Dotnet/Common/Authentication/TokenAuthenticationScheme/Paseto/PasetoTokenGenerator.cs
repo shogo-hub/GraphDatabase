@@ -6,7 +6,7 @@ using Paseto.Cryptography.Key;
 using Paseto.Protocol;
 using System.Security.Claims;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Paseto;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Paseto;
 
 internal sealed class PasetoTokenGenerator : ITokenGenerator
 {

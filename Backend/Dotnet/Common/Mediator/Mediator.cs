@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backend.Common.Mediator;
+namespace Backend.Dotnet.Common.Mediator;
 
 internal sealed class Mediator(
     IServiceProvider serviceProvider,

@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 
 public interface ITokenGenerator
 {

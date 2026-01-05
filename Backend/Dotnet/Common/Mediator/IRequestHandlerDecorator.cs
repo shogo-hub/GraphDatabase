@@ -1,4 +1,4 @@
-namespace Backend.Common.Mediator;
+namespace Backend.Dotnet.Common.Mediator;
 
 public interface IRequestHandlerDecorator<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {

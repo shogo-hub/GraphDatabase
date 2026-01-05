@@ -1,4 +1,4 @@
-namespace Backend.Common.Authentication.TokenAuthenticationScheme;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 
 /// <summary>
 ///  Holds callback delegates that the authentication handler invokes at lifecycle points.

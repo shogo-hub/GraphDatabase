@@ -1,4 +1,4 @@
-namespace Backend.Common.Miscellaneous;
+namespace Backend.Dotnet.Common.Miscellaneous;
 
 public readonly struct Unit
 {

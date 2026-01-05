@@ -1,4 +1,4 @@
-namespace Backend.Common.Mediator;
+namespace Backend.Dotnet.Common.Mediator;
 
 internal sealed class RequestHandlerDescriptor
 {

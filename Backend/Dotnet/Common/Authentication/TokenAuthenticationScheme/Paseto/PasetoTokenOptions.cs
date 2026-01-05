@@ -1,4 +1,4 @@
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Paseto;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Paseto;
 /// <summary>
 /// POCO holding PASETO token options.
 /// </summary>
