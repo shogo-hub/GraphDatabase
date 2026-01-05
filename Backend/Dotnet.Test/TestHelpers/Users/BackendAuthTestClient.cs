@@ -1,7 +1,7 @@
 using Backend.Dotnet.Common.Miscellaneous;
 using Backend.Dotnet.Common.Serialization.Json;
 using Backend.Dotnet.Tests.TestHelpers.Http;
-using Backend.Dotnet.Controller.Users.Models;
+using Backend.Dotnet.Controllers.Users.Models;
 using System.Net.Http.Json;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Users;
