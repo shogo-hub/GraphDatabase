@@ -1,5 +1,5 @@
 using Backend.Dotnet.Tests.TestHelpers.Http;
-using Backend.WebApi.Service;
+using Backend.Dotnet.Controller.Service;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Service;

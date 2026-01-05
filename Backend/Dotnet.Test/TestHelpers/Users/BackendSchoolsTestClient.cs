@@ -1,6 +1,6 @@
 using Backend.Common.Serialization.Json;
 using Backend.Dotnet.Tests.TestHelpers.Http;
-using Backend.WebApi.Users.Models;
+using Backend.Dotnet.Controller.Users.Models;
 using System.Net.Http.Json;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Users;
@@ -21,7 +21,7 @@ internal sealed class BackendSchoolsTestClient(HttpClient inner) : IDisposable
         using var response = await _inner.PostAsJsonAsync(
             "/api/v1/schools",
             request,
-            WebApiJsonSerializer.Options,
+            ContollerApiJsonSerializer.Options,
             cancellationToken);
         return await response.ToJsonApiResponseAsync<SchoolView>(cancellationToken);
     }

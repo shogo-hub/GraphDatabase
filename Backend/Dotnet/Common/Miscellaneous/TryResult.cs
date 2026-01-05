@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Backend.Common.Miscellaneous;
+namespace Backend.Dotnet.Common.Miscellaneous;
 
 /// <summary>
 /// Represents the result of an operation that may either succeed with a value

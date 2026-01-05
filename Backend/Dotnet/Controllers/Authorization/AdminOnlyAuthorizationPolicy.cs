@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace Backend.Controllers.Authorization;
+namespace Backend.Dotnet.Controllers.Authorization;
 
 internal static class AdminOnlyAuthorizationPolicy
 {

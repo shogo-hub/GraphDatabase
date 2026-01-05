@@ -15,7 +15,7 @@ public static class HttpResponseMessageExtensions
             message.StatusCode,
             content,
             message.Headers,
-            x => JsonSerializer.Deserialize<T>(x, WebApiJsonSerializer.Options)
+            x => JsonSerializer.Deserialize<T>(x, ControllerApiJsonSerializer.Options)
                 ?? throw new InvalidOperationException("Content deserialized to null."));
     }
 

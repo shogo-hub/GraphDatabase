@@ -1,7 +1,7 @@
 using Backend.Common.Miscellaneous;
 using Backend.Common.Serialization.Json;
 using Backend.Dotnet.Tests.TestHelpers.Http;
-using Backend.WebApi.Users.Models;
+using Backend.Dotnet.Controller.Users.Models;
 using System.Net.Http.Json;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Users;
@@ -22,7 +22,7 @@ internal sealed class BackendAuthTestClient(HttpClient inner) : IDisposable
         using var response = await _inner.PostAsJsonAsync(
             "/api/v1/auth/register",
             request,
-            WebApiJsonSerializer.Options,
+            ControllerApiJsonSerializer.Options,
             cancellationToken);
         return await response.ToJsonApiResponseAsync<UserView>(cancellationToken);
     }
@@ -34,7 +34,7 @@ internal sealed class BackendAuthTestClient(HttpClient inner) : IDisposable
         using var response = await _inner.PostAsJsonAsync(
             "/api/v1/auth/login",
             request,
-            WebApiJsonSerializer.Options,
+            ControllerApiJsonSerializer.Options,
             cancellationToken);
         return await response.ToEmptyApiResponseAsync(cancellationToken);
     }

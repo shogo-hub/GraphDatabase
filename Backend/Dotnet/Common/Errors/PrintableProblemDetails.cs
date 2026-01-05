@@ -9,7 +9,7 @@ namespace Backend.Dotnet.Common.Errors;
 /// </summary>
 /// <remarks>
 /// Useful for logging or debugging where a compact JSON representation of the problem
-/// details is desirable. Uses the project's <see cref="WebApiJsonSerializer.Options"/> settings.
+/// details is desirable. Uses the project's <see cref="ControllerApiJsonSerializer.Options"/> settings.
 /// </remarks>
 public sealed class PrintableProblemDetails : ProblemDetails
 {
@@ -20,6 +20,6 @@ public sealed class PrintableProblemDetails : ProblemDetails
     /// <returns>A JSON string representing the problem details.</returns>
     public override string ToString()
     {
-        return JsonSerializer.Serialize(this, WebApiJsonSerializer.Options);
+        return JsonSerializer.Serialize(this, ControllerApiJsonSerializer.Options);
     }
 }

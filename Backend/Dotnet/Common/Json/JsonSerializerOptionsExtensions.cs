@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Backend.Common.Serialization.Json;
+namespace Backend.Dotnet.Common.Serialization.Json;
 
 public static class JsonSerializerOptionsExtensions
 {

@@ -62,7 +62,7 @@ public sealed class BackendService : WebApplicationService<BackendContract>
             new DbContextOptionsBuilder<UsersDbContext>().UseMySql(_databaseConnectionString, version).Options);
         await usersDbContext.Database.EnsureDeletedAsync();
 
-        _webApiPort.Dispose();
+        _controllerPort.Dispose();
         await base.DisposeAsync(disposing);
     }
 }

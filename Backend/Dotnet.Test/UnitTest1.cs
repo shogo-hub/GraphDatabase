@@ -1,6 +1,6 @@
 ﻿namespace Dotnet.Test;
 
-public class UnitTest1
+public class DotnetProjectTests
 {
     [Fact]
     public void Test1()
