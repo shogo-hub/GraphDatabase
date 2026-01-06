@@ -1,4 +1,4 @@
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Cookies;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Cookies;
 
 /// <summary>
 /// Provides defaults for the access token cookie used by the cookie-based token accessor.

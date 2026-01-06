@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 
 public readonly struct TokenParseResult
 {

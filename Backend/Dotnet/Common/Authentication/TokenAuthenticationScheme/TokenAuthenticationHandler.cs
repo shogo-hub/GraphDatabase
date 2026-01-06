@@ -5,7 +5,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
-namespace Backend.Common.Authentication.TokenAuthenticationScheme;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 
 /// <summary>
 /// Authentication handler that validates and issues token-based authentication.

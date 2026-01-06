@@ -1,4 +1,4 @@
-namespace Backend.Common.Authentication.TokenAuthenticationScheme.Paseto;
+namespace Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Paseto;
 
 /// <summary>
 /// Default values used for PASETO token cookie authentication.

@@ -1,4 +1,4 @@
-namespace Backend.Common.Miscellaneous;
+namespace Backend.Dotnet.Common.Miscellaneous;
 
 /// <summary>
 /// Represents a failed operation result that carries an error value.

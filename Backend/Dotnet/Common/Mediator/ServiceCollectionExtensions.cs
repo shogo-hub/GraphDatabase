@@ -1,7 +1,7 @@
-using Backend.Common.Miscellaneous;
+using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backend.Common.Mediator;
+namespace Backend.Dotnet.Common.Mediator;
 
 public static class ServiceCollectionExtensions
 {
