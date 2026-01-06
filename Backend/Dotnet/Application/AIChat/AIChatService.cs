@@ -1,6 +1,6 @@
 using Backend.Dotnet.Application.AIChat.PromptCreator;
 using Backend.Application.AIChat.AIModelProvider;
-using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
 using Backend.Dotnet.Controllers.AIChatIntegration.Models;
 using Microsoft.Extensions.Logging;

@@ -1,5 +1,5 @@
 using Backend.Dotnet.Common.Miscellaneous;
-using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Errors.Types;
 
 namespace Backend.Dotnet.Application.AIChat;
 

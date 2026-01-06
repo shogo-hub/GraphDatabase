@@ -1,4 +1,4 @@
-using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
 
 namespace Backend.Dotnet.Application.AIChat.AIModelProvider;
