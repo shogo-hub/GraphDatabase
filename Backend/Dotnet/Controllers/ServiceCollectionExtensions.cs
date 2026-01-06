@@ -1,21 +1,21 @@
-using Backend.Application.AIChat.PromptCreator;
-using Backend.Application.AIChat.AIModelProvider;
-using Backend.Application.AIChat.AIModelProvider.OpenAI;
-using Backend.Application.AIChat.AIModelProvider.Mock;
-using Backend.Application.AIChat.AIModelProvider.OpenRouter;
-using Backend.Common.Authentication.TokenAuthenticationScheme;
-using Backend.Common.Authentication.TokenAuthenticationScheme.Paseto;
-using Backend.Common.Errors.AspNetCore;
-@@ -9,6 +14,8 @@
-using Backend.WebApi.Users.Authentication;
+using Backend.Dotnet.Application.AIChat.PromptCreator;
+using Backend.Dotnet.Application.AIChat.AIModelProvider;
+using Backend.Dotnet.Application.AIChat.AIModelProvider.OpenAI;
+using Backend.Dotnet.Application.AIChat.AIModelProvider.Mock;
+using Backend.Dotnet.Application.AIChat.AIModelProvider.OpenRouter;
+using Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
+using Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Paseto;
+using Backend.Dotnet.Common.Errors.AspNetCore;
+
+using Backend.Dotnet.Controllers.Users.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 
-namespace Backend.WebApi;
+namespace Backend.Dotnet.Controllers;
 
-@@ -81,6 +88,57 @@ public static IServiceCollection AddWebApi(this IServiceCollection services, ICo
+public static IServiceCollection AddController(this IServiceCollection services, ICo
                 opt.DefaultChallengeScheme = PasetoTokenCookieDefaults.AuthenticationScheme;
             });
 

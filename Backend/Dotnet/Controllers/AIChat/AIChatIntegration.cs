@@ -1,14 +1,14 @@
-using Backend.Application.AIChat;
-using Backend.Common.Errors;
-using Backend.Common.Errors.AspNetCore;
-using Backend.WebApi.RagIntegration.Models;
+using Backend.Dotnet.Application.AIChat;
+using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Errors.AspNetCore;
+using Backend.Dotnet.Controllers.AIChat.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.WebApi.RagIntegration;
+namespace Backend.Dotnet.Controllers.AIChat;
 
 [ApiController]
-[Route("api/v1/rag")]
+[Route("api/v1/AIChat")]
 [Produces("application/json")]
 public sealed class AIChatController : ControllerBase
 {
@@ -20,20 +20,20 @@ public sealed class AIChatController : ControllerBase
     /// Constructor
     ///</summary>
     public AIChatController(
-        IAIChatService ragService,
+        IAIChatService AIChatService,
         ILogger<AIChatController> logger,
         IProblemDetailsFactory problemDetailsFactory)
     {
-        _AIChatService = ragService;
+        _AIChatService = AIChatService;
         _logger = logger;
         _problemDetailsFactory = problemDetailsFactory;
     }
 
     /// <summary>
-    /// Process a RAG (Retrieval-Augmented Generation) query by rendering a prompt template,
+    /// Process a AIChat (Retrieval-Augmented Generation) query by rendering a prompt template,
     /// calling the AI service, and returning the generated response with metadata.
     /// </summary>
-    /// <param name="request">The RAG query request containing the user's question, optional context, and task type.</param>
+    /// <param name="request">The AIChat query request containing the user's question, optional context, and task type.</param>
     /// <param name="ct">Cancellation token to cancel the operation.</param>
     /// <returns>
     /// 200 OK with the AI-generated result and metadata (duration, task type, request ID) on success.
@@ -43,13 +43,13 @@ public sealed class AIChatController : ControllerBase
     /// </returns>
     /// <remarks>
     /// The method validates the input using DataAnnotations, maps the request to a domain model,
-    /// calls <see cref="IRagService.QueryAsync"/> which renders the prompt template and queries the AI provider,
+    /// calls <see cref="IAIChatService.QueryAsync"/> which renders the prompt template and queries the AI provider,
     /// then returns the result with timing metadata.
     /// All requests are logged with a unique request ID for traceability.
     /// </remarks>
     [HttpPost("query")]
     public async Task<IActionResult> QueryAsync(
-        [FromBody] RagQueryRequest request,
+        [FromBody] AIChatQueryRequest request,
         CancellationToken ct)
     {
         var requestId = Guid.NewGuid().ToString("N")[..8];
@@ -80,10 +80,10 @@ public sealed class AIChatController : ControllerBase
 
         var duration = (long)(DateTimeOffset.UtcNow - start).TotalMilliseconds;
 
-        return Ok(new RagQueryResponse
+        return Ok(new AIChatQueryResponse
         {
             Result = result.Value.Output,
-            Meta = new RagMetadata
+            Meta = new AIChatMetadata
             {
                 DurationMs = duration,
                 TaskType = domainModel.TaskType,

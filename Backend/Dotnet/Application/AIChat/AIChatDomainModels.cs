@@ -1,3 +1,5 @@
+using Backend.Dotnet.Application.AIChat.PromptCreator;
+
 namespace Backend.Dotnet.Application.AIChat;
 
 /// <summary>
@@ -7,7 +9,7 @@ public sealed record AIChatDomainModel
 {
     public required string Query { get; init; }
     public string? Context { get; init; }
-    public required string TaskType { get; init; }
+    public PromptTemplateType TaskType { get; init; } = PromptTemplateType.Explain;
     public required string Provider { get; init; }
 }
 

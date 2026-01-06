@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Backend.Dotnet.Application.AIChat.PromptCreator;
 
 /*Model used with cliednt - server traffic*/
 
-namespace Backend.WebApi.RagIntegration.Models;
+namespace Backend.Dotnet.Controllers.AIChat.Models;
 
 // Enum for choosing model platform(or mock test)
 [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -16,9 +17,9 @@ public enum AiProvider
 }
 
 /// <summary>
-/// Request model for RAG query endpoint.
+/// Request model for AIChat query endpoint.
 /// </summary>
-public sealed class RagQueryRequest
+public sealed class AIChatQueryRequest
 {
     [Required(ErrorMessage = "Query is required")]
     [StringLength(5000, MinimumLength = 1, ErrorMessage = "Query must be 1-5000 characters")]
@@ -28,8 +29,12 @@ public sealed class RagQueryRequest
     [StringLength(2000, ErrorMessage = "Context must be under 2000 characters")]
     public string? Context { get; init; }
 
-    [RegularExpression("^(answer|summarize|explain)$", ErrorMessage = "TaskType must be 'answer', 'summarize', or 'explain'")]
-    public string TaskType { get; init; } = "answer";
+    /// <summary>
+    /// Type of prompt template to use. Default: Explain.
+    /// </summary>
+    [JsonPropertyName("taskType")]
+    [EnumDataType(typeof(PromptTemplateType), ErrorMessage = "TaskType must be a valid PromptTemplateType")]
+    public PromptTemplateType TaskType { get; init; } = PromptTemplateType.Explain;
 
     /// <summary>
     /// Select which AI provider to use for this request.
@@ -41,18 +46,18 @@ public sealed class RagQueryRequest
 }
 
 /// <summary>
-/// Response model for RAG query endpoint.
+/// Response model for AIChat query endpoint.
 /// </summary>
-public sealed class RagQueryResponse
+public sealed class AIChatQueryResponse
 {
     public required string Result { get; init; }
-    public required RagMetadata Meta { get; init; }
+    public required AIChatMetadata Meta { get; init; }
 }
 
 /// <summary>
-/// Metadata about the RAG query execution.
+/// Metadata about the AIChat query execution.
 /// </summary>
-public sealed class RagMetadata
+public sealed class AIChatMetadata
 {
     public required long DurationMs { get; init; }
     public required string TaskType { get; init; }

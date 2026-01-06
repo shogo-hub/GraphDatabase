@@ -38,7 +38,7 @@ internal sealed class AIProviderFactory
         {
             return TryResult.Fail<Error>(new ProviderNotFoundError("No AI clients are registered", providerName));
         }
-
+        // FirstOrDefault iterate Enum and return first one which meet the requirement.
         var client = _clients.FirstOrDefault(c => 
             c.ProviderName.Equals(providerName, StringComparison.OrdinalIgnoreCase));
 

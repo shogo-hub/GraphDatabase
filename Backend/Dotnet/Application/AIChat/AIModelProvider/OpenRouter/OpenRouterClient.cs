@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,11 +13,11 @@ namespace Backend.Dotnet.Application.AIChat.AIModelProvider.OpenRouter;
 /// OpenRouter AI client implementation for testing.
 /// Uses free models from OpenRouter (OpenAI-compatible API).
 /// </summary>
-public sealed class TestClient : IAiClient
+public sealed class OpenRouterClient : IAiClient
 {
     private readonly HttpClient _http;
     private readonly AiOptions  _options;
-    private readonly ILogger<TestClient> _logger;
+    private readonly ILogger<OpenRouterClient> _logger;
 
     public string ProviderName => "OpenRouter";
 
@@ -27,10 +27,10 @@ public sealed class TestClient : IAiClient
     /// <param name="httpClient">Typed HttpClient configured for OpenRouter.</param>
     /// <param name="options">Bound Test settings from configuration.</param>
     /// <param name="logger">Logger for telemetry and errors.</param>
-    public TestClient(
+    public OpenRouterClient(
         HttpClient httpClient,
         IOptions<AiOptions > options,
-        ILogger<TestClient> logger)
+        ILogger<OpenRouterClient> logger)
     {
         _http = httpClient;
         _options = options.Value;

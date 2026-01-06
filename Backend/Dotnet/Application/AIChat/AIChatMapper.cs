@@ -1,4 +1,4 @@
-using Backend.Dotnet.Controllers.AIChatIntegration.Models;
+using Backend.Dotnet.Controllers.AIChat.Models;
 
 namespace Backend.Dotnet.Application.AIChat;
 
@@ -15,7 +15,7 @@ internal static class AIChatMapper
         {
             Query = request.Query.Trim(),
             Context = request.Context?.Trim(),
-            TaskType = request.TaskType.ToLowerInvariant(),
+            TaskType = request.TaskType,
             Provider = request.Provider.ToString()
         };
 
