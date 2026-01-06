@@ -1,7 +1,7 @@
-using Backend.Common.Miscellaneous;
-using Backend.Common.Errors;
+using Backend.Dotnet.Common.Miscellaneous;
+using Backend.Dotnet.Common.Errors;
 
-namespace Backend.Application.AIChat;
+namespace Backend.Dotnet.Application.AIChat;
 
 /// <summary>
 /// Service for AIChat (Retrieval-Augmented Generation) query orchestration.

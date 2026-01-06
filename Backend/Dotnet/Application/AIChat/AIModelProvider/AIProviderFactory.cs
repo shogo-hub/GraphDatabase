@@ -1,8 +1,8 @@
-using Backend.Common.Errors;
-using Backend.Common.Miscellaneous;
+using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Application.AIChat.AIModelProvider;
+namespace Backend.Dotnet.Application.AIChat.AIModelProvider;
 
 /// <summary>
 /// Factory for selecting the appropriate AI client based on provider name.

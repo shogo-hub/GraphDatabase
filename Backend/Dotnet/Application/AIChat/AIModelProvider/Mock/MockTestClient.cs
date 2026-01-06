@@ -1,8 +1,8 @@
-using Backend.Common.Errors;
-using Backend.Common.Miscellaneous;
+using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Application.AIChat.AIModelProvider.Mock;
+namespace Backend.Dotnet.Application.AIChat.AIModelProvider.Mock;
 
 /// <summary>
 /// Mock implementation of IAiClient for testing without calling external AI services.

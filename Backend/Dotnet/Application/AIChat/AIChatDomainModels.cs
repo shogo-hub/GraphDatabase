@@ -1,4 +1,4 @@
-namespace Backend.Application.AIChat;
+namespace Backend.Dotnet.Application.AIChat;
 
 /// <summary>
 /// Domain model representing a AIChat query request.

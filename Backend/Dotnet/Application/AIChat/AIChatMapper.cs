@@ -1,6 +1,6 @@
-using Backend.WebApi.AIChatIntegration.Models;
+using Backend.Dotnet.Controllers.AIChatIntegration.Models;
 
-namespace Backend.Application.AIChat;
+namespace Backend.Dotnet.Application.AIChat;
 
 /// <summary>
 /// Pure, testable mapper for AIChat models.

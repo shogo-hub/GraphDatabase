@@ -1,12 +1,12 @@
-using Backend.Application.AIChat.PromptCreator;
+using Backend.Dotnet.Application.AIChat.PromptCreator;
 using Backend.Application.AIChat.AIModelProvider;
-using Backend.Common.Errors;
-using Backend.Common.Miscellaneous;
-using Backend.WebApi.AIChatIntegration.Models;
+using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Miscellaneous;
+using Backend.Dotnet.Controllers.AIChatIntegration.Models;
 using Microsoft.Extensions.Logging;
 
 /*Main business logic for AIChat system*/ 
-namespace Backend.Application.AIChat;
+namespace Backend.Dotnet.Application.AIChat;
 
 /// <summary>
 /// Implementation of <see cref="IAIChatService"/> that orchestrates prompt rendering and AI queries.

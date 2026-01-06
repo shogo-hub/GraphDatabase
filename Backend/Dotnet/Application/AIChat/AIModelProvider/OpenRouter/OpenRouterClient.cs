@@ -1,13 +1,13 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Backend.Common.Errors;
-using Backend.Common.Miscellaneous;
+using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Backend.Application.AIChat.PromptCreator;
+using Backend.Dotnet.Application.AIChat.PromptCreator;
 
-namespace Backend.Application.AIChat.AIModelProvider.OpenRouter;
+namespace Backend.Dotnet.Application.AIChat.AIModelProvider.OpenRouter;
 
 /// <summary>
 /// OpenRouter AI client implementation for testing.

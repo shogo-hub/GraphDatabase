@@ -1,7 +1,7 @@
-using Backend.Common.Errors;
-using Backend.Common.Miscellaneous;
+using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Common.Miscellaneous;
 
-namespace Backend.Application.AIChat.AIModelProvider;
+namespace Backend.Dotnet.Application.AIChat.AIModelProvider;
 
 /// <summary>
 /// Interface for managing AI request/response.
