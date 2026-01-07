@@ -16,7 +16,12 @@ internal sealed class FileBasedPromptTemplateService : IPromptTemplateService
         IWebHostEnvironment env,
         ILogger<FileBasedPromptTemplateService> logger)
     {
-        _templatesPath = Path.Combine(env.ContentRootPath, "Templates", "Prompts");
+        _templatesPath = Path.Combine(
+            env.ContentRootPath,
+            "Application",
+            "AIChat",
+            "PromptCreator",
+            "PromptTemplate");
         _logger = logger;
         _templateCache = new Dictionary<PromptTemplateType, string>();
 

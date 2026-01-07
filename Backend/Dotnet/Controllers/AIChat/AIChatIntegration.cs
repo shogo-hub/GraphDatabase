@@ -1,6 +1,5 @@
 using Backend.Dotnet.Application.AIChat;
 using Backend.Dotnet.Common.Errors;
-using Backend.Dotnet.Common.Errors.AspNetCore;
 using Backend.Dotnet.Controllers.AIChat.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -86,7 +85,7 @@ public sealed class AIChatController : ControllerBase
             Meta = new AIChatMetadata
             {
                 DurationMs = duration,
-                TaskType = domainModel.TaskType,
+                TaskType = domainModel.TaskType.ToString(),
                 RequestId = requestId
             }
         });
