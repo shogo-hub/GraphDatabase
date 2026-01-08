@@ -1,11 +1,10 @@
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Backend.Dotnet.Application.AIChat.Configuration;
 using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Backend.Dotnet.Application.AIChat.PromptCreator;
 
 namespace Backend.Dotnet.Application.AIChat.AIModelProvider.OpenRouter;
 
@@ -16,7 +15,7 @@ namespace Backend.Dotnet.Application.AIChat.AIModelProvider.OpenRouter;
 public sealed class OpenRouterClient : IAiClient
 {
     private readonly HttpClient _http;
-    private readonly AiOptions  _options;
+    private readonly AiProviderOptions _options;
     private readonly ILogger<OpenRouterClient> _logger;
 
     public string ProviderName => "OpenRouter";
@@ -29,11 +28,11 @@ public sealed class OpenRouterClient : IAiClient
     /// <param name="logger">Logger for telemetry and errors.</param>
     public OpenRouterClient(
         HttpClient httpClient,
-        IOptions<AiOptions > options,
+        IOptions<AIChatOptions> options,
         ILogger<OpenRouterClient> logger)
     {
         _http = httpClient;
-        _options = options.Value;
+        _options = options.Value.GetRequiredProvider("OpenRouter");
         _logger = logger;
     }
 

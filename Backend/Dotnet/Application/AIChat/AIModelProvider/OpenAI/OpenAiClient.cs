@@ -1,18 +1,17 @@
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Backend.Dotnet.Application.AIChat.Configuration;
 using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Backend.Dotnet.Application.AIChat.PromptCreator;
 
 namespace Backend.Dotnet.Application.AIChat.AIModelProvider.OpenAI;
 
 public sealed class OpenAiClient : IAiClient
 {
     private readonly HttpClient _http;
-    private readonly AiOptions _options;
+    private readonly AiProviderOptions _options;
     private readonly ILogger<OpenAiClient> _logger;
 
     public string ProviderName => "OpenAi";
@@ -25,11 +24,11 @@ public sealed class OpenAiClient : IAiClient
     /// <param name="logger">Logger for telemetry and errors.</param>
     public OpenAiClient(
         HttpClient httpClient,
-        IOptions<AiOptions> options,
+        IOptions<AIChatOptions> options,
         ILogger<OpenAiClient> logger)
     {
         _http = httpClient;
-        _options = options.Value;
+        _options = options.Value.GetRequiredProvider("OpenAi");
         _logger = logger;
     }
 
@@ -103,7 +102,7 @@ public sealed class OpenAiClient : IAiClient
                 "AI request completed. RequestId={RequestId}, DurationMs={DurationMs}, ResponseLength={ResponseLength}",
                 requestId, duration, content?.Length ?? 0);
 
-                return TryResult.Succeed(content ?? string.Empty);
+            return TryResult.Succeed(content ?? string.Empty);
         }
         catch (Exception ex) when (ex is not ArgumentException)
         {
