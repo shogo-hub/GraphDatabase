@@ -25,6 +25,15 @@ internal sealed class BackendAIChatTestClient(HttpClient inner) : IDisposable
         return await _inner.PostAsync(QueryPath, content, cancellationToken);
     }
 
+    public async Task<HttpResponseMessage> PostQueryRawAsync(
+        object request,
+        CancellationToken cancellationToken = default)
+    {
+        var json = JsonSerializer.Serialize(request, ControllerApiJsonSerializer.Options);
+        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        return await _inner.PostAsync(QueryPath, content, cancellationToken);
+    }
+
     public async Task<AIChatQueryResponse> PostQueryOkAsync(
         AIChatQueryRequest request,
         CancellationToken cancellationToken = default)

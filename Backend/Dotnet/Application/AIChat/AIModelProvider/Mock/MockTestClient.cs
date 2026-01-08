@@ -1,6 +1,8 @@
+using Backend.Dotnet.Application.AIChat.Configuration;
 using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Backend.Dotnet.Application.AIChat.AIModelProvider.Mock;
 
@@ -11,16 +13,22 @@ namespace Backend.Dotnet.Application.AIChat.AIModelProvider.Mock;
 public sealed class MockTestClient : IAiClient
 {
     private readonly ILogger<MockTestClient> _logger;
+    private readonly AiProviderOptions _options;
 
     public string ProviderName => "Mock";
 
     /// <summary>
     /// Create a new <see cref="MockTestClient"/>.
     /// </summary>
+    /// <param name="options">Configuration options containing Mock provider settings.</param>
     /// <param name="logger">Logger for telemetry.</param>
-    public MockTestClient(ILogger<MockTestClient> logger)
+    public MockTestClient(
+        IOptions<AIChatOptions> options, 
+        ILogger<MockTestClient> logger)
     {
         _logger = logger;
+        // Ensure "Mock" entry exists in appsettings.json or throws exception, just like real providers.
+        _options = options.Value.GetRequiredProvider("Mock");
     }
 
     /// <summary>
@@ -47,13 +55,27 @@ public sealed class MockTestClient : IAiClient
         try
         {
             _logger.LogDebug(
-                "Mock AI request started. RequestId={RequestId}, PromptLength={PromptLength}",
-                requestId, prompt.Length);
+                "Mock AI request started. RequestId={RequestId}, PromptLength={PromptLength}, Model={Model}",
+                requestId, prompt.Length, _options.Model);
 
             // Simulate network delay
             await Task.Delay(100, cancellationToken);
+            
+            // Build deterministic response using configured options
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"[MOCK] Response from Provider='{ProviderName}', Model='{_options.Model}'");
+            sb.AppendLine($"Request ID: {requestId}");
 
-            var response = GenerateMockResponse(prompt);
+            if (prompt.Contains("Explain", StringComparison.OrdinalIgnoreCase))
+            {
+                sb.AppendLine("Graph databases store nodes and edges.");
+            }
+            else
+            {
+                sb.AppendLine("This is a mock response content.");
+            }
+
+            var response = sb.ToString();
 
             var duration = (DateTimeOffset.UtcNow - start).TotalMilliseconds;
 
@@ -77,22 +99,23 @@ public sealed class MockTestClient : IAiClient
     /// Generate a deterministic mock response based on prompt content.
     /// Can be extended to return different responses for different task types.
     /// </summary>
-    private static string GenerateMockResponse(string prompt)
+    private string GenerateMockResponse(string prompt)
     {
         // Simple deterministic response based on prompt characteristics
         var promptLower = prompt.ToLowerInvariant();
+        var modelTag = $"[MOCK:{_options.Model ?? "default"}]";
 
         if (promptLower.Contains("summarize"))
         {
-            return "[MOCK] This is a mock summary. The content has been analyzed and condensed into key points for demonstration purposes.";
+            return $"{modelTag} This is a mock summary. The content has been analyzed and condensed into key points for demonstration purposes.";
         }
 
         if (promptLower.Contains("explain"))
         {
-            return "[MOCK] This is a mock explanation. The concept has been broken down into understandable parts with examples for testing purposes.";
+            return $"{modelTag} This is a mock explanation. The concept has been broken down into understandable parts with examples for testing purposes.";
         }
 
         // Default answer response
-        return $"[MOCK] This is a mock answer response. Prompt length: {prompt.Length} characters. This response is generated for testing without calling external AI services.";
+        return $"{modelTag} This is a mock answer response. Prompt length: {prompt.Length} characters. This response is generated for testing without calling external AI services.";
     }
 }
