@@ -3,11 +3,9 @@ using Backend.Dotnet.Application.AIChat.AIModelProvider;
 using Backend.Dotnet.Application.AIChat.AIModelProvider.OpenAI;
 using Backend.Dotnet.Application.AIChat.AIModelProvider.Mock;
 using Backend.Dotnet.Application.AIChat.AIModelProvider.OpenRouter;
+using Backend.Dotnet.Application.AIChat.Configuration;
 using Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme;
 using Backend.Dotnet.Common.Authentication.TokenAuthenticationScheme.Paseto;
-using Backend.Dotnet.Common.Errors.AspNetCore;
-
-using Backend.Dotnet.Controllers.Users.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -15,13 +13,19 @@ using System.Net.Http.Headers;
 
 namespace Backend.Dotnet.Controllers;
 
-public static IServiceCollection AddController(this IServiceCollection services, ICo
-                opt.DefaultChallengeScheme = PasetoTokenCookieDefaults.AuthenticationScheme;
-            });
+public static class ServiceCollectionExtensions
+{
+    public static IServiceCollection AddControllers(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Authentication
+        services.AddAuthentication(opt =>
+        {
+            opt.DefaultAuthenticateScheme = PasetoTokenCookieDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = PasetoTokenCookieDefaults.AuthenticationScheme;
+        });
 
         // AI Integration - Register AI services
-        services.Configure<AiOptions>(configuration.GetSection("AI"));
-        services.Configure<AiOptions >(configuration.GetSection("OpenRouter"));
+        services.Configure<AIChatOptions>(configuration.GetSection("AIChat"));
 
         // Register prompt template service
         services.AddSingleton<IPromptTemplateService, FileBasedPromptTemplateService>();
@@ -35,40 +39,44 @@ public static IServiceCollection AddController(this IServiceCollection services,
         // Register typed HttpClient for OpenAI
         services.AddHttpClient<OpenAiClient>((sp, client) =>
         {
-            var opts = sp.GetRequiredService<IOptions<AiOptions>>().Value;
-            client.BaseAddress = new Uri(opts.BaseUrl);
-            client.Timeout = TimeSpan.FromSeconds(opts.TimeoutSeconds);
+            var aiChatOptions = sp.GetRequiredService<IOptions<AIChatOptions>>().Value;
+            var providerInfo = aiChatOptions.GetRequiredProvider("OpenAi");
+            
+            client.BaseAddress = new Uri(providerInfo.BaseUrl);
+            client.Timeout = TimeSpan.FromSeconds(providerInfo.TimeoutSeconds);
 
-            if (!string.IsNullOrEmpty(opts.ApiKey))
+            if (!string.IsNullOrEmpty(providerInfo.ApiKey))
             {
                 client.DefaultRequestHeaders.Authorization = 
-                    new AuthenticationHeaderValue("Bearer", opts.ApiKey);
+                    new AuthenticationHeaderValue("Bearer", providerInfo.ApiKey);
             }
         });
 
         // Register OpenAiClient as IAiClient
         services.AddSingleton<IAiClient>(sp => sp.GetRequiredService<OpenAiClient>());
 
-        // Register typed HttpClient for OpenRouter (Test)
-        services.AddHttpClient<TestClient>((sp, client) =>
+        // Register typed HttpClient for OpenRouter
+        services.AddHttpClient<OpenRouterClient>((sp, client) =>
         {
-            var opts = sp.GetRequiredService<IOptions<AiOptions >>().Value;
-            client.BaseAddress = new Uri(opts.BaseUrl);
-            client.Timeout = TimeSpan.FromSeconds(opts.TimeoutSeconds);
+            var aiChatOptions = sp.GetRequiredService<IOptions<AIChatOptions>>().Value;
+            var providerInfo = aiChatOptions.GetRequiredProvider("OpenRouter");
+            
+            client.BaseAddress = new Uri(providerInfo.BaseUrl);
+            client.Timeout = TimeSpan.FromSeconds(providerInfo.TimeoutSeconds);
 
-            if (!string.IsNullOrEmpty(opts.ApiKey))
+            if (!string.IsNullOrEmpty(providerInfo.ApiKey))
             {
                 client.DefaultRequestHeaders.Authorization = 
-                    new AuthenticationHeaderValue("Bearer", opts.ApiKey);
+                    new AuthenticationHeaderValue("Bearer", providerInfo.ApiKey);
 
                 // OpenRouter-specific headers
                 client.DefaultRequestHeaders.Add("HTTP-Referer", "http://localhost:5000");
-                client.DefaultRequestHeaders.Add("X-Title", "CT-Backend-Test");
+                client.DefaultRequestHeaders.Add("X-Title", "GraphDatabase-Backend");
             }
         });
 
-        // Register TestClient as IAiClient
-        services.AddSingleton<IAiClient>(sp => sp.GetRequiredService<TestClient>());
+        // Register OpenRouterClient as IAiClient
+        services.AddSingleton<IAiClient>(sp => sp.GetRequiredService<OpenRouterClient>());
 
         return services;
     }
