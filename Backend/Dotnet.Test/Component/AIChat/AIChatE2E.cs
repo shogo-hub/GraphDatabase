@@ -19,6 +19,8 @@ public sealed class AIChatE2EFromAppSettingsTests : IClassFixture<BackendService
     [Fact]
     public async Task Query_uses_provider_from_appsettings_and_returns_answer()
     {
+
+        // ARRANGE
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true)
             .AddJsonFile("appsettings.Development.json", optional: true)
@@ -34,8 +36,9 @@ public sealed class AIChatE2EFromAppSettingsTests : IClassFixture<BackendService
              throw new InvalidOperationException($"Provider '{provider}' is selected for E2E but configuration 'AIChat:ProviderInfo:{provider}' is missing.");
         }
 
-        // 2. Validate ApiKey configuration for ALL providers 
+        // 2. Validate ApiKey configuration for ALL providers (including Mock)
         var apiKey = providerSection["ApiKey"];
+
         if (string.IsNullOrWhiteSpace(apiKey))
         {
              throw new InvalidOperationException(
@@ -57,17 +60,20 @@ public sealed class AIChatE2EFromAppSettingsTests : IClassFixture<BackendService
         using var response = await client.PostQueryRawAsync(request);
         var body = await response.Content.ReadAsStringAsync();
 
+        // ASSERT
         Assert.True(
             response.StatusCode == HttpStatusCode.OK,
             $"Expected 200 OK. Got {(int)response.StatusCode} {response.StatusCode}. Body={body}");
 
-        // Non-mock: don't check accuracy, just verify something was generated
-        Assert.False(string.IsNullOrWhiteSpace(body));
-
-        // Mock: strong deterministic assertion (adjust if your mock output differs)
         if (provider.Equals("Mock", StringComparison.OrdinalIgnoreCase))
         {
+            // Mock: strong deterministic assertion (adjust if your mock output differs)
             Assert.Contains("[MOCK]", body);
+        }
+        else
+        {
+            // Non-mock: don't check accuracy, just verify something was generated
+            Assert.False(string.IsNullOrWhiteSpace(body), "Response body should not be empty or whitespace.");
         }
     }
 }

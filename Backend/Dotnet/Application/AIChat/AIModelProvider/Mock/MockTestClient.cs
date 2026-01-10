@@ -57,25 +57,12 @@ public sealed class MockTestClient : IAiClient
             _logger.LogDebug(
                 "Mock AI request started. RequestId={RequestId}, PromptLength={PromptLength}, Model={Model}",
                 requestId, prompt.Length, _options.Model);
-
+            
             // Simulate network delay
             await Task.Delay(100, cancellationToken);
-            
-            // Build deterministic response using configured options
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"[MOCK] Response from Provider='{ProviderName}', Model='{_options.Model}'");
-            sb.AppendLine($"Request ID: {requestId}");
 
-            if (prompt.Contains("Explain", StringComparison.OrdinalIgnoreCase))
-            {
-                sb.AppendLine("Graph databases store nodes and edges.");
-            }
-            else
-            {
-                sb.AppendLine("This is a mock response content.");
-            }
-
-            var response = sb.ToString();
+            // Use the shared method for deterministic response generation
+            var response = GenerateMockResponse(prompt);
 
             var duration = (DateTimeOffset.UtcNow - start).TotalMilliseconds;
 
