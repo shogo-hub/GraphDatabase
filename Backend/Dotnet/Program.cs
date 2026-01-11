@@ -1,29 +1,54 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using System;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+namespace Backend.Dotnet;
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+internal static class Program
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    private static async Task Main(string[] _)
+    {
+        var builder = WebApplication.CreateBuilder();
+        builder.Configuration.AddJsonFile("appsettings.json").AddEnvironmentVariables();
+        builder.Host.UseDefaultServiceProvider(opt =>
+        {
+            opt.ValidateOnBuild = true;
+            opt.ValidateScopes = true;
+        });
+        // Set detail setting for DI
+        BackendDetailSetting.ConfigureServices(builder.Services, builder.Configuration);
+        await using var host = builder.Build();
+        BackendDetailSetting.Configure(host);
+        await host.RunAsync();
+    }
 }
 
-app.UseHttpsRedirection();
-app.UseRouting();
 
-app.UseAuthorization();
+internal static class BackendDetailSetting
+{
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+        services
+            .AddApplication()
+            .AddControllers(configuration)
+            .AddDatabase(configuration)
+            .AddInitialization();
+    }
 
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
-
-app.Run();
+    public static void Configure(WebApplication app)
+    {
+        app.UseRouting();
+        app.UseHealthChecks(HealthController.GetPath);
+        app.MapOpenApi(OpenApiController.GetPath);
+        app.UseSwaggerUI(opt =>
+        {
+            opt.SwaggerEndpoint(OpenApiController.GetPath, OpenApiController.GetPath);
+        });
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+    }
+}
