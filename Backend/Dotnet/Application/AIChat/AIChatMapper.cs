@@ -1,4 +1,4 @@
-using Backend.Dotnet.Controllers.AIChat.Models;
+using Backend.Dotnet.Controllers.Service.AIChat.Models;
 
 namespace Backend.Dotnet.Application.AIChat;
 

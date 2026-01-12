@@ -1,10 +1,10 @@
 using Backend.Dotnet.Application.AIChat;
 using Backend.Dotnet.Common.Errors;
-using Backend.Dotnet.Controllers.AIChat.Models;
+using Backend.Dotnet.Controllers.Service.AIChat.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Dotnet.Controllers.AIChat;
+namespace Backend.Dotnet.Controllers.Service.AIChat;
 
 [ApiController]
 [Route("api/v1/AIChat")]

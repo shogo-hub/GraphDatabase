@@ -2,7 +2,7 @@ using Backend.Dotnet.Application.AIChat.PromptCreator;
 using Backend.Dotnet.Application.AIChat.AIModelProvider;
 using Backend.Dotnet.Common.Errors.Types;
 using Backend.Dotnet.Common.Miscellaneous;
-using Backend.Dotnet.Controllers.AIChat.Models;
+using Backend.Dotnet.Controllers.Service.AIChat.Models;
 using Microsoft.Extensions.Logging;
 
 /*Main business logic for AIChat system*/ 

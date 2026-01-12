@@ -4,7 +4,7 @@ using Backend.Dotnet.Application.AIChat.PromptCreator;
 
 /*Model used with cliednt - server traffic*/
 
-namespace Backend.Dotnet.Controllers.AIChat.Models;
+namespace Backend.Dotnet.Controllers.Service.AIChat.Models;
 
 // Enum for choosing model platform(or mock test)
 [JsonConverter(typeof(JsonStringEnumConverter))]
