@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Moq;
 using Microsoft.Extensions.Logging;
 using Backend.Dotnet.Application.AIChat.AIModelProvider;
-using Backend.Dotnet.Common.Miscellaneous;
 using Backend.Dotnet.Common.Errors.Types;
 
 namespace Backend.Dotnet.Tests.Unit.Applications.AIChat;

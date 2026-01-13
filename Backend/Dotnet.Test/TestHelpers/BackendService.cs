@@ -1,15 +1,12 @@
-using Backend.Database;
-using Backend.Database.Users;
 using IntegrationMocks.Core;
 using IntegrationMocks.Core.Names;
 using IntegrationMocks.Core.Networking;
 using IntegrationMocks.Modules.AspNetCore;
 using IntegrationMocks.Modules.MySql;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+//using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace Backend.Dotnet.Tests.TestHelpers;
 

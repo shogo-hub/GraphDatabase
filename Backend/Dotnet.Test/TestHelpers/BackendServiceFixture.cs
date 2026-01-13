@@ -1,10 +1,9 @@
-using Backend.Database;
 using IntegrationMocks.Core;
 using IntegrationMocks.Core.Environments;
 using IntegrationMocks.Core.Names;
 using IntegrationMocks.Core.Networking;
 using IntegrationMocks.Modules.MySql;
-using MySqlConnector;
+//using MySqlConnector;
 
 namespace Backend.Dotnet.Tests.TestHelpers;
 
