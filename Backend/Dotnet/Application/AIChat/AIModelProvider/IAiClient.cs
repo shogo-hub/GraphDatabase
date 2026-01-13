@@ -7,7 +7,7 @@ namespace Backend.Dotnet.Application.AIChat.AIModelProvider;
 /// Interface for managing AI request/response.
 /// Handle query for AI asynchronously.
 /// </summary>
-internal interface IAiClient
+public interface IAiClient
 {
     /// <summary>
     /// The name of this AI provider (e.g., "OpenAi", "Mock").

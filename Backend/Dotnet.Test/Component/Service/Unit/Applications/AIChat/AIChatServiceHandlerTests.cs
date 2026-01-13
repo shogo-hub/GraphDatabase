@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using Moq;
+using Moq.Protected;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -102,7 +104,7 @@ public class AIChatServiceHandlerTests
         Assert.Contains("Make sure this prompt is in JSON", jsonBody);
 
         // 3. Verify success result
-        Assert.True(result.Success, $"Client failed to parse response: {result.Error}");
+        Assert.True(result.IsSucceeded, $"Client failed to parse response: {result.Error}");
     }
 
     /// <summary>

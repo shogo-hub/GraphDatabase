@@ -1,6 +1,6 @@
-using Backend.Dotnet.Common.Miscellaneous;
 using Backend.Dotnet.Common.Serialization.Json;
 using System.Text.Json;
+using UnitType = Backend.Dotnet.Common.Miscellaneous.Unit;
 
 namespace Backend.Dotnet.Tests.TestHelpers.Http;
 
@@ -19,12 +19,12 @@ public static class HttpResponseMessageExtensions
                 ?? throw new InvalidOperationException("Content deserialized to null."));
     }
 
-    public static async Task<ApiResponse<Unit>> ToEmptyApiResponseAsync(
+    public static async Task<ApiResponse<UnitType>> ToEmptyApiResponseAsync(
         this HttpResponseMessage message,
         CancellationToken cancellationToken)
     {
         var content = await message.Content.ReadAsStringAsync(cancellationToken);
-        return new ApiResponse<Unit>(message.StatusCode, content, message.Headers, _ => Unit.Value);
+        return new ApiResponse<UnitType>(message.StatusCode, content, message.Headers, _ => UnitType.Value);
     }
 
     public static async Task<ApiResponse<T>> ToEnumApiResponseAsync<T>(

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using Backend.Dotnet.Common.Serialization.Json;
-using Backend.Dotnet.Tests.TestHelpers.AIChat;
+using Backend.Dotnet.Controllers.Service.AIChat.Models;
 
 namespace Backend.Dotnet.Tests.TestHelpers.AIChat;
 

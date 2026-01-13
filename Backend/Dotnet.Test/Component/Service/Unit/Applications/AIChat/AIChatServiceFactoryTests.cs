@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Xunit;
+using Moq;
 using Microsoft.Extensions.Logging;
 using Backend.Dotnet.Application.AIChat.AIModelProvider;
 using Backend.Dotnet.Common.Errors.Types;
@@ -34,8 +35,8 @@ public class AIProviderFactoryTests
 
         // ASSERT
         // Ensure success and that the "OpenAI" client is returned
-        Assert.True(result.Success);
-        Assert.Equal("OpenAI", result.Value.ProviderName);
+        Assert.True(result.IsSucceeded);
+        Assert.Equal("OpenAI", result.Value!.ProviderName);
     }
 
     [Fact]
@@ -54,9 +55,9 @@ public class AIProviderFactoryTests
         var result = factory.GetClient("Gemini");
 
         // ASSERT
-        Assert.True(result.Success);
+        Assert.True(result.IsSucceeded);
         // Although Gemini was requested, it should fallback to Mock
-        Assert.Equal("Mock", result.Value.ProviderName);
+        Assert.Equal("Mock", result.Value!.ProviderName);
 
         // Verify that a warning log was issued (optional)
         _mockLogger.Verify(
@@ -64,8 +65,8 @@ public class AIProviderFactoryTests
                 LogLevel.Warning,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => true),
-                It.IsAny<Exception>(),
-                It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                It.IsAny<Exception?>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }
 
@@ -81,7 +82,7 @@ public class AIProviderFactoryTests
         var result = factory.GetClient("OpenAI");
 
         // ASSERT
-        Assert.False(result.Success);
+        Assert.False(result.IsSucceeded);
         // Since even "Mock" is missing, it should return a ProviderNotFoundError
         Assert.IsType<ProviderNotFoundError>(result.Error);
     }

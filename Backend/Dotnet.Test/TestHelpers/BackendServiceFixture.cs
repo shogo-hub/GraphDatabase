@@ -3,7 +3,7 @@ using IntegrationMocks.Core.Environments;
 using IntegrationMocks.Core.Names;
 using IntegrationMocks.Core.Networking;
 using IntegrationMocks.Modules.MySql;
-//using MySqlConnector;
+using MySqlConnector;
 
 namespace Backend.Dotnet.Tests.TestHelpers;
 
@@ -30,7 +30,7 @@ public sealed class BackendServiceFixture : IAsyncLifetime
                 PortManager.Default,
                 new DockerMySqlServiceOptions
                 {
-                    Image = $"mysql:{MySqlMeta.Version}"
+                    Image = "mysql:8.0"
                 })));
         Backend = new BackendService(nameGenerator, PortManager.Default, MySql);
     }
