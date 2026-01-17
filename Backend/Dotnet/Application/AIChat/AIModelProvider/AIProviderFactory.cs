@@ -8,7 +8,7 @@ namespace Backend.Dotnet.Application.AIChat.AIModelProvider;
 /// Factory for selecting the appropriate AI client based on provider name.
 /// Supports dynamic provider selection from registered IAiClient implementations.
 /// </summary>
-internal sealed class AIProviderFactory
+public sealed class AIProviderFactory
 {
     private readonly IEnumerable<IAiClient> _clients;
     private readonly ILogger<AIProviderFactory> _logger;

@@ -11,7 +11,7 @@ namespace Backend.Dotnet.Application.AIChat;
 /// <summary>
 /// Implementation of <see cref="IAIChatService"/> that orchestrates prompt rendering and AI queries.
 /// </summary>
-internal sealed class AIChatService : IAIChatService
+public sealed class AIChatService : IAIChatService
 {
     private readonly AIProviderFactory _prociderFactory;
     private readonly IPromptTemplateService _promptTemplate;
