@@ -33,7 +33,7 @@ public sealed class BackendService : WebApplicationService<BackendContract>
 
     protected override void Configure(WebApplication app)
     {
-        Backend.Dotnet.BackendDetailSetting.Configure(app);
+        Dotnet.BackendDetailSetting.Configure(app);
     }
 
     protected override WebApplicationBuilder CreateWebApplicationBuilder()
