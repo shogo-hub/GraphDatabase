@@ -2,12 +2,9 @@ using IntegrationMocks.Core;
 using IntegrationMocks.Core.Names;
 using IntegrationMocks.Core.Networking;
 using IntegrationMocks.Modules.AspNetCore;
-using IntegrationMocks.Modules.MySql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace Backend.Dotnet.Tests.TestHelpers;
 
@@ -18,11 +15,10 @@ public sealed class BackendService : WebApplicationService<BackendContract>
 
     public BackendService(
         INameGenerator nameGenerator,
-        IPortManager portManager,
-        IInfrastructureService<MySqlServiceContract> mySql)
+        IPortManager portManager)
     {
         _controllerPort = portManager.TakePort();
-        _databaseConnectionString = mySql.CreateMySqlConnectionString(nameGenerator.GenerateName());
+        _databaseConnectionString = string.Empty; // no MySQL in tests by default
         Contract = new BackendContract
         {
             ApiUrl = new Uri($"http://localhost:{_controllerPort.Number}")
