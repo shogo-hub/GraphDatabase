@@ -28,7 +28,7 @@ public sealed class AIProviderFactory
 
     /// <summary>
     /// Get an AI client by provider name.
-    /// Falls back to Mock provider if the requested provider is not found.
+    /// Returns an error if the requested provider is not found.
     /// </summary>
     /// <param name="providerName">The name of the provider (e.g., "OpenAi", "Mock").</param>
     /// <returns>The matching IAiClient implementation.</returns>
@@ -38,6 +38,11 @@ public sealed class AIProviderFactory
         {
             return TryResult.Fail<Error>(new ProviderNotFoundError("No AI clients are registered", providerName));
         }
+
+        if (string.IsNullOrWhiteSpace(providerName))
+        {
+            return TryResult.Fail<Error>(new ProviderNotFoundError("Provider name is empty", providerName));
+        }
         // FirstOrDefault iterate Enum and return first one which meet the requirement.
         var client = _clients.FirstOrDefault(c => 
             c.ProviderName.Equals(providerName, StringComparison.OrdinalIgnoreCase));
@@ -45,16 +50,11 @@ public sealed class AIProviderFactory
         if (client == null)
         {
             _logger.LogWarning(
-                "Provider {RequestedProvider} not found, falling back to Mock. Available providers: {AvailableProviders}",
+                "Provider {RequestedProvider} not found. Available providers: {AvailableProviders}",
                 providerName,
                 string.Join(", ", _clients.Select(c => c.ProviderName)));
 
-            client = _clients.FirstOrDefault(c => c.ProviderName.Equals("Mock", StringComparison.OrdinalIgnoreCase));
-
-            if (client == null)
-            {
-                return TryResult.Fail<Error>(new ProviderNotFoundError("No Mock provider registered as fallback", providerName));
-            }
+            return TryResult.Fail<Error>(new ProviderNotFoundError("Requested AI provider was not found", providerName));
         }
 
         _logger.LogDebug("Selected AI provider: {Provider}", client.ProviderName);

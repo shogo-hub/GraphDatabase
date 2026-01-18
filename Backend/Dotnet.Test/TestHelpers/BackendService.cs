@@ -4,7 +4,9 @@ using IntegrationMocks.Core.Networking;
 using IntegrationMocks.Modules.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Backend.Dotnet.Controllers;
 
 namespace Backend.Dotnet.Tests.TestHelpers;
 
@@ -46,6 +48,13 @@ public sealed class BackendService : WebApplicationService<BackendContract>
             ["Database:ConnectionString"] = _databaseConnectionString
         });
         Backend.Dotnet.BackendDetailSetting.ConfigureServices(builder.Services, builder.Configuration);
+        // Use project-defined AddControllers(this IServiceCollection, IConfiguration)
+        builder.Services.AddControllers(builder.Configuration);
+
+        // Ensure controllers assembly is included
+        builder.Services.AddControllers()
+            .AddApplicationPart(typeof(Backend.Dotnet.Controllers.Service.AIChat.AIChatController).Assembly);
+
         return builder;
     }
 

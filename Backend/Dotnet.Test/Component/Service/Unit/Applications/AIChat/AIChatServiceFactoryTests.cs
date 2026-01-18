@@ -18,72 +18,89 @@ public class AIProviderFactoryTests
     }
 
     [Fact]
-    public void GetClient_ReturnsCorrectClient_WhenProviderExists_CaseInsensitive()
+    public void GetClient_ReturnsMockClient_WhenProviderIsMock()
     {
         // ARRANGE
-        // Assume a client named "OpenAI" exists
-        var mockOpenAi = new Mock<IAiClient>();
-        mockOpenAi.Setup(c => c.ProviderName).Returns("OpenAI");
+        var mockClient = new Mock<IAiClient>();
+        mockClient.Setup(c => c.ProviderName).Returns("Mock");
 
-        // Register in the Factory
-        var clients = new List<IAiClient> { mockOpenAi.Object };
+        var clients = new List<IAiClient> { mockClient.Object };
         var factory = new AIProviderFactory(clients, _mockLogger.Object);
 
         // ACT
-        // Request with lowercase "openai"
-        var result = factory.GetClient("openai");
-
-        // ASSERT
-        // Ensure success and that the "OpenAI" client is returned
-        Assert.True(result.IsSucceeded);
-        Assert.Equal("OpenAI", result.Value!.ProviderName);
-    }
-
-    [Fact]
-    public void GetClient_FallsBackToMock_WhenRequestedProviderNotFound()
-    {
-        // ARRANGE
-        // Situation where only the "Mock" client exists
-        var mockMock = new Mock<IAiClient>();
-        mockMock.Setup(c => c.ProviderName).Returns("Mock");
-
-        var clients = new List<IAiClient> { mockMock.Object };
-        var factory = new AIProviderFactory(clients, _mockLogger.Object);
-
-        // ACT
-        // Request a non-existent provider "Gemini"
-        var result = factory.GetClient("Gemini");
+        var result = factory.GetClient("Mock");
 
         // ASSERT
         Assert.True(result.IsSucceeded);
-        // Although Gemini was requested, it should fallback to Mock
         Assert.Equal("Mock", result.Value!.ProviderName);
-
-        // Verify that a warning log was issued (optional)
-        _mockLogger.Verify(
-            x => x.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => true),
-                It.IsAny<Exception?>(),
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
     }
 
     [Fact]
-    public void GetClient_ReturnsError_WhenNeitherProviderNorMockExists()
+    public void GetClient_ReturnsOpenAiClient_WhenProviderIsOpenAi()
     {
         // ARRANGE
-        // Situation where no clients are registered (e.g., DI configuration error)
-        var clients = new List<IAiClient>(); 
+        var openAi = new Mock<IAiClient>();
+        openAi.Setup(c => c.ProviderName).Returns("OpenAi");
+
+        var clients = new List<IAiClient> { openAi.Object };
         var factory = new AIProviderFactory(clients, _mockLogger.Object);
 
         // ACT
-        var result = factory.GetClient("OpenAI");
+        var result = factory.GetClient("OpenAi");
+
+        // ASSERT
+        Assert.True(result.IsSucceeded);
+        Assert.Equal("OpenAi", result.Value!.ProviderName);
+    }
+
+    [Fact]
+    public void GetClient_ReturnsOpenRouterClient_WhenProviderIsOpenRouter()
+    {
+        // ARRANGE
+        var openRouter = new Mock<IAiClient>();
+        openRouter.Setup(c => c.ProviderName).Returns("OpenRouter");
+
+        var clients = new List<IAiClient> { openRouter.Object };
+        var factory = new AIProviderFactory(clients, _mockLogger.Object);
+
+        // ACT
+        var result = factory.GetClient("OpenRouter");
+
+        // ASSERT
+        Assert.True(result.IsSucceeded);
+        Assert.Equal("OpenRouter", result.Value!.ProviderName);
+    }
+
+    [Fact]
+    public void GetClient_ReturnsError_WhenRequestedProviderNotFound()
+    {
+        // ARRANGE
+        var mockClient = new Mock<IAiClient>();
+        mockClient.Setup(c => c.ProviderName).Returns("Mock");
+
+        var clients = new List<IAiClient> { mockClient.Object };
+        var factory = new AIProviderFactory(clients, _mockLogger.Object);
+
+        // ACT
+        var result = factory.GetClient("NonExistent");
 
         // ASSERT
         Assert.False(result.IsSucceeded);
-        // Since even "Mock" is missing, it should return a ProviderNotFoundError
+        Assert.IsType<ProviderNotFoundError>(result.Error);
+    }
+
+    [Fact]
+    public void GetClient_ReturnsError_WhenNoClientsRegistered()
+    {
+        // ARRANGE
+        var clients = new List<IAiClient>();
+        var factory = new AIProviderFactory(clients, _mockLogger.Object);
+
+        // ACT
+        var result = factory.GetClient("OpenAi");
+
+        // ASSERT
+        Assert.False(result.IsSucceeded);
         Assert.IsType<ProviderNotFoundError>(result.Error);
     }
 }

@@ -1,71 +1,75 @@
+using System.Net;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Xunit;
-using Moq;
-using Backend.Dotnet.Controllers.Service.AIChat;
-using Backend.Dotnet.Application.AIChat;
+using Backend.Dotnet.Common.Serialization.Json;
 using Backend.Dotnet.Controllers.Service.AIChat.Models;
-using Backend.Dotnet.Common.Miscellaneous;
-using Backend.Dotnet.Common.Errors;
+using Backend.Dotnet.Tests.TestHelpers;
+using Backend.Dotnet.Tests.TestHelpers.Http;
+using Xunit;
 
-namespace Backend.Dotnet.Tests.Unit.Controllers;
+namespace Backend.Dotnet.Tests.Component.AIChat;
 
-public class AIChatControllerTests
+public sealed class AIChatControllerTests : IClassFixture<BackendServiceFixture>
 {
-    private readonly Mock<IAIChatService> _mockService;
-    private readonly Mock<ILogger<AIChatController>> _mockLogger;
-    private readonly Mock<IProblemDetailsFactory> _mockProblemDetailsFactory;
-    private readonly AIChatController _controller;
+    private readonly TestHttpClient _client;
 
-    public AIChatControllerTests()
+    public AIChatControllerTests(BackendServiceFixture fixture)
     {
-        _mockService = new Mock<IAIChatService>();
-        _mockLogger = new Mock<ILogger<AIChatController>>();
-        _mockProblemDetailsFactory = new Mock<IProblemDetailsFactory>();
-
-        _controller = new AIChatController(
-            _mockService.Object,
-            _mockLogger.Object,
-            _mockProblemDetailsFactory.Object);
+        _client = TestHttpClientFactory.Create(fixture.Backend.Contract.ApiUrl);
     }
 
     [Fact]
     public async Task PostQuery_ReturnsBadRequest_WhenQueryIsEmpty()
     {
         // ARRANGE
-        var request = new AIChatQueryRequest { Query = "", Provider = AiProvider.Mock };
+        var request = new AIChatQueryRequest
+        {
+            Query = "",
+            Provider = AiProvider.Mock
+        };
 
-        // Simulate model validation failure
-        _controller.ModelState.AddModelError("Query", "Required");
-        var result = await _controller.QueryAsync(request, CancellationToken.None);
+        // ACT
+        using var response = await _client.PostAsJsonAsync(
+            "api/v1/AIChat/query",
+            request,
+            ControllerApiJsonSerializer.Options);
+
+        var body = await response.Content.ReadAsStringAsync();
 
         // ASSERT
-        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequest.StatusCode);
-
-        // Serviceが呼ばれていないことを確認 (無駄な処理防止)
-        _mockService.Verify(s => s.QueryAsync(It.IsAny<AIChatDomainModel>(), It.IsAny<CancellationToken>()), Times.Never);
+        Assert.True(
+            response.StatusCode == HttpStatusCode.BadRequest,
+            $"Expected 400 BadRequest. Got {(int)response.StatusCode} {response.StatusCode}. Body={body}");
     }
 
     [Fact]
-    public async Task PostQuery_ReturnsOk_WhenServiceReturnsAnswer()
+    public async Task PostQuery_ReturnsOk_WhenProviderIsMock()
     {
         // ARRANGE
-        var request = new AIChatQueryRequest { Query = "Hello", Provider = AiProvider.Mock };
-
-        // モックの設定: QueryAsyncが呼ばれたら、決まった値を返す
-        _mockService
-            .Setup(s => s.QueryAsync(It.IsAny<AIChatDomainModel>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(TryResult.Succeed(new AIChatResultModel { Output = "Mock Answer" }));
+        var request = new AIChatQueryRequest
+        {
+            Query = "Hello",
+            Provider = AiProvider.Mock
+        };
 
         // ACT
-        var result = await _controller.QueryAsync(request, CancellationToken.None);
+        using var response = await _client.PostAsJsonAsync(
+            "api/v1/AIChat/query",
+            request,
+            ControllerApiJsonSerializer.Options);
+
+        var body = await response.Content.ReadAsStringAsync();
 
         // ASSERT
-        var okResult = Assert.IsType<OkObjectResult>(result);
-        var response = Assert.IsType<AIChatQueryResponse>(okResult.Value);
-        Assert.Equal("Mock Answer", response.Result);
+        Assert.True(
+            response.StatusCode == HttpStatusCode.OK,
+            $"Expected 200 OK. Got {(int)response.StatusCode} {response.StatusCode}. Body={body}");
+
+        var payload = await response.Content.ReadFromJsonAsync<AIChatQueryResponse>(ControllerApiJsonSerializer.Options);
+        Assert.NotNull(payload);
+        Assert.False(string.IsNullOrWhiteSpace(payload!.Result), "Result should not be empty.");
+
+        // Mock の場合は決定的な文字列が含まれる想定（Mock実装に合わせて調整）
+        Assert.Contains("[MOCK:", payload.Result);
     }
 }
