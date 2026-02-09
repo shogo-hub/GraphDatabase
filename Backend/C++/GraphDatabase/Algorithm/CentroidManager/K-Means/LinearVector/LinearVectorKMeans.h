@@ -4,9 +4,9 @@
 
 namespace GraphDatabase::Algorithm {
 
-class LinearVectorKMedoids : public BaseCentroidManager {
+class LinearVectorKMeans : public BaseCentroidManager {
 public:
-    LinearVectorKMedoids(const CentroidManagerOptions& opts) 
+    LinearVectorKMeans(const CentroidManagerOptions& opts) 
         : BaseCentroidManager(opts) {}
 
     void updateCentroids(
@@ -22,17 +22,19 @@ public:
         const float* weights) override;
 
 private:
-   // Helpers
-   int split_clusters(
-       size_t k,
-       size_t d,
-       float* centroids,
-       float* hassign);
+    // Helper functionality internally used
+    int split_clusters(
+        size_t d,
+        size_t k,
+        size_t n,
+        size_t k_frozen,
+        float* hassign,
+        float* centroids);
 
-   void post_process_centroids(
-       size_t k,
-       size_t d,
-       float* centroids);
+    void post_process_centroids(
+        size_t k,
+        size_t d,
+        float* centroids);
 };
 
 }
