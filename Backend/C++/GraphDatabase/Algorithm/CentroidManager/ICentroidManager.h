@@ -24,7 +24,7 @@ public:
         float* distances) = 0;
 
     // Update Step
-    virtual void updateCentroids(
+    virtual int updateCentroids(
         size_t n, 
         size_t k,
         size_t d,

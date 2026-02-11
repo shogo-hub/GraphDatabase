@@ -9,7 +9,7 @@ public:
     LinearVectorKMedoids(const CentroidManagerOptions& opts) 
         : BaseCentroidManager(opts) {}
 
-    void updateCentroids(
+    int updateCentroids(
         size_t n, 
         size_t k,
         size_t d,

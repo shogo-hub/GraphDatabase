@@ -13,7 +13,7 @@ namespace GraphDatabase::Algorithm {
 
 #define EPS (1 / 1024.)
 
-void LinearVectorKMeans::updateCentroids(
+int LinearVectorKMeans::updateCentroids(
     size_t n, 
     size_t k,
     size_t d,
@@ -26,6 +26,7 @@ void LinearVectorKMeans::updateCentroids(
     const float* weights) {
 
     // 1. Adjust for frozen centroids
+    FAISS_THROW_IF_NOT(k_frozen <= k);
     k -= k_frozen;
     centroids += k_frozen * d;
     
@@ -37,7 +38,7 @@ void LinearVectorKMeans::updateCentroids(
     // --- Accumulation Step ---
     #pragma omp parallel
     {
-        // Get therad number
+        // Get thread number
         int nt = omp_get_num_threads();
         // Get current thread id
         int rank = omp_get_thread_num();
@@ -105,17 +106,21 @@ void LinearVectorKMeans::updateCentroids(
 
     // --- Split Clusters ---
     // Note: split_clusters receives the original k but also k_frozen to adjust internally?
-    // The snippet says: split_clusters(size_t d, size_t k, size_t n, size_t k_frozen...) 
-    // and inside: k -= k_frozen; centroids += k_frozen * d;
-    // So we should pass the original pointers and counts, or consistent adjusted ones.
-    // The snippet signature takes original k and k_frozen. 
-    // We already adjusted local k and centroids in this function. 
-    // To call the function correctly as per snippet, we pass original values 
-    // (re-calculating original pointer for centroids is centroids - k_frozen*d).
-    // Or simpler: just pass the adjusted ones if we change the helper signature? 
-    // But I declared the helper to take k_frozen. So I pass original.
     
-    split_clusters(d, k + k_frozen, n, k_frozen, hassign, centroids - k_frozen * d);
+    // We pass original K and Centroid start pointer because split_clusters expects to handle adjustments internally
+    // or we can refactor split_clusters to work on active only.
+    // Based on existing split_clusters implementation at bottom:
+    // k -= k_frozen; centroids += k_frozen * d;
+    // So it expects Full K and Full Centroid Pointer.
+    
+    // BUT we adjusted local k and centroids at the top of this function:
+    // k -= k_frozen;
+    // centroids += k_frozen * d;
+    
+    // So to pass "Full K" we use (k + k_frozen).
+    // To pass "Full Centroid Pointer", we use (centroids - k_frozen * d).
+    
+    int nsplit = split_clusters(d, k + k_frozen, n, k_frozen, hassign, centroids - k_frozen * d);
 
     // --- Post Process ---
     // Pass adjusted k and centroids?
@@ -125,6 +130,8 @@ void LinearVectorKMeans::updateCentroids(
     // User snippet implementation doesn't check k_frozen.
     // So pass the calculated active range.
     post_process_centroids(k, d, centroids);
+
+    return nsplit;
 }
 
 int LinearVectorKMeans::split_clusters(

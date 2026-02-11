@@ -14,7 +14,7 @@
 
 namespace GraphDatabase::Algorithm {
 
-void LinearVectorKMedoids::updateCentroids(
+int LinearVectorKMedoids::updateCentroids(
         size_t n, 
         size_t k,
         size_t d,
@@ -140,8 +140,10 @@ void LinearVectorKMedoids::updateCentroids(
     // It has no k_frozen logic.
     // Since we only want to split active clusters, pass adjusted pointers.
     
-    split_clusters(k_active, d, centroids_active, hassign_active);
+    int nsplit = split_clusters(k_active, d, centroids_active, hassign_active);
     post_process_centroids(k_active, d, centroids_active);
+
+    return nsplit;
 }
 
 int LinearVectorKMedoids::split_clusters(size_t k, size_t d, float* centroids, float* hassign) {

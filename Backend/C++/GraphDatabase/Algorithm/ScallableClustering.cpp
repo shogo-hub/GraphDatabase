@@ -11,7 +11,9 @@
 #include <faiss/VectorTransform.h>
 #include <faiss/impl/AuxIndexStructures.h>
 
-#include "CentroidManager/K-Means/LinearVector/LinearVectorKMeans.h"
+#include "CentroidManager/CentroidManagerFactory.h"
+#include "CentroidManager/ICentroidManager.h"
+#include "CentroidManager/ClusteringTypes.h"
 
 #include <chrono>
 #include <cinttypes>
@@ -29,15 +31,24 @@
 #include <faiss/utils/utils.h>
 
 namespace faiss {
-
+// TODO : Will search for what is overload constructor is used or not.(If no needed , remove this)
 Clustering::Clustering(int d, int k) : d(d), k(k) {}
 
-Clustering::Clustering(int d, int k, const ClusteringParameters& cp)
-        : ClusteringParameters(cp), d(d), k(k) {}
+// Constructor Injection: Receive the manager from outside
+Clustering::Clustering(int d, int k, const ClusteringParameters& cp, 
+                       std::shared_ptr<GraphDatabase::Algorithm::ICentroidManager> manager)
+        : ClusteringParameters(cp), d(d), k(k), centroidManager(manager) {}
 
 void Clustering::post_process_centroids() {
-    GraphDatabase::Algorithm::LinearVectorKMeans::post_process_centroids(
-        d, k, centroids.data(), spherical, int_centroids);
+    if (spherical) {
+        fvec_renorm_L2(d, k, centroids.data());
+    }
+
+    if (int_centroids) {
+        for (size_t i = 0; i < centroids.size(); i++) {
+            centroids[i] = roundf(centroids[i]);
+        }
+    }
 }
 
 void Clustering::train(
@@ -276,6 +287,13 @@ void Clustering::train_encoded(
     // temporary buffer to decode vectors during the optimization
     std::vector<float> decode_buffer(codec ? d * decode_block_size : 0);
 
+    // Provide a fallback if centroidManager was not injected in constructor (optional safe-guard)
+    if (!this->centroidManager) {
+        // Default to K-Means if not provided
+        this->centroidManager = GraphDatabase::Algorithm::CentroidManagerFactory::create(
+            GraphDatabase::Algorithm::ClusteringType::K_Means, d, k, *this
+        );
+    }
 
     // Itaration of Cluster configuration(from centroid picking)
     for (int redo = 0; redo < nredo; redo++) {
@@ -395,21 +413,17 @@ void Clustering::train_encoded(
 
             size_t k_frozen = frozen_centroids ? n_input_centroids : 0;
             // Update centroid 
-            // TODO : Extract this to centroid manager(k-means , k-medoids)
-            GraphDatabase::Algorithm::LinearVectorKMeans::compute_centroids(
-                    d,
-                    k,
+            int nsplit = this->centroidManager->updateCentroids(
                     nx,
-                    k_frozen,
+                    k,
+                    d,
+                    hassign.data(),
                     x,
                     codec,
+                    k_frozen,
+                    centroids.data(),
                     assign.get(),
-                    weights,
-                    hassign.data(),
-                    centroids.data());
-
-            int nsplit = GraphDatabase::Algorithm::LinearVectorKMeans::split_clusters(
-                    d, k, nx, k_frozen, hassign.data(), centroids.data());
+                    weights);
 
             // collect statistics
             ClusteringIterationStats stats = {
@@ -432,7 +446,7 @@ void Clustering::train_encoded(
                 fflush(stdout);
             }
 
-            post_process_centroids();
+            // post_process_centroids();
 
             // add centroids to index for the next iteration (or for output)
 
