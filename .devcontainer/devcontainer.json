@@ -1,0 +1,22 @@
+{
+    "name": "GraphDatabase",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": "."
+    },
+    "remoteUser": "vscode",
+    //Mount object
+    "workspaceFolder": "/workspaces/GraphDatabase",
+    // Add extensions for language on this project
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "ms-dotnettools.csharp",
+                "streetsidesoftware.code-spell-checker"
+            ]
+        }
+    },
+    //"postCreateCommand": "python3 -m pip install --user -U pip && python3 -m pip install --user -U numpy pytest || true"
+}
