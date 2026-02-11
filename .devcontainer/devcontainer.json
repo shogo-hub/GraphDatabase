@@ -10,7 +10,8 @@
     // Add extensions for language on this project
     "customizations": {
         "vscode": {
-            "extensions": [
+                "extensions": [
+                "GitHub.copilot-chat",
                 "ms-vscode.cpptools",
                 "ms-vscode.cmake-tools",
                 "ms-dotnettools.csharp",
