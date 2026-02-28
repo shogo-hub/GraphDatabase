@@ -112,7 +112,7 @@ int LinearVectorKMedoids::updateCentroids(
             for (size_t member_idx : members) {
                 get_vec(member_idx, member_vec.data());
                 
-                float dist = faiss::fvec_L2sqr(cand_vec.data(), member_vec.data(), d);
+                float dist = similarityComputer_->compute(cand_vec.data(), member_vec.data(), d);
                 
                 if (weights) {
                     current_total_dist += dist * weights[member_idx];

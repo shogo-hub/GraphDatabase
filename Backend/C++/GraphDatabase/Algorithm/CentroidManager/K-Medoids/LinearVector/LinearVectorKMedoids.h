@@ -6,8 +6,10 @@ namespace GraphDatabase::Algorithm {
 
 class LinearVectorKMedoids : public BaseCentroidManager {
 public:
-    LinearVectorKMedoids(const CentroidManagerOptions& opts) 
-        : BaseCentroidManager(opts) {}
+    LinearVectorKMedoids(
+        const CentroidManagerOptions& opts,
+        std::unique_ptr<ISimilarityComputer> similarityComputer)
+        : BaseCentroidManager(opts, std::move(similarityComputer)) {}
 
     int updateCentroids(
         size_t n, 

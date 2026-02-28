@@ -2,11 +2,12 @@
 
 #include "ICentroidManager.h"
 #include "ClusteringTypes.h"
+#include "../SimilarityComputer/ISimilarityComputer.h"
+#include <memory>
 #include <vector>
 #include <limits>
 #include <omp.h>
 #include <faiss/impl/FaissAssert.h>
-#include <faiss/utils/distances.h>
 #include <faiss/Index.h>
 
 namespace GraphDatabase::Algorithm {
@@ -14,29 +15,33 @@ namespace GraphDatabase::Algorithm {
 class BaseCentroidManager : public ICentroidManager {
 protected:
     CentroidManagerOptions options;
+    std::unique_ptr<ISimilarityComputer> similarityComputer_;
 
 public:
-    BaseCentroidManager(const CentroidManagerOptions& opts) 
-        : options(opts) {}
+    BaseCentroidManager(
+        const CentroidManagerOptions& opts,
+        std::unique_ptr<ISimilarityComputer> similarityComputer)
+        : options(opts)
+        , similarityComputer_(std::move(similarityComputer)) {}
 
     virtual ~BaseCentroidManager() = default;
 
     void findClosestCentroids(
-        size_t n, 
+        size_t n,
         size_t k,
         size_t d,
         const uint8_t* x,
         const faiss::Index* codec,
         const float* centroids_in,
-        int64_t* assignments, 
+        int64_t* assignments,
         float* distances) override {
-        
+
         size_t line_size = codec ? codec->sa_code_size() : d * sizeof(float);
 
         #pragma omp parallel
         {
             std::vector<float> decode_buf(d);
-            
+
             #pragma omp for
             for (size_t i = 0; i < n; i++) {
                 const float* xi;
@@ -52,8 +57,8 @@ public:
 
                 for (size_t j = 0; j < k; j++) {
                     const float* c = centroids_in + j * d;
-                    float dist = faiss::fvec_L2sqr(xi, c, d);
-                    
+                    float dist = similarityComputer_->compute(xi, c, d);
+
                     if (dist < min_dist) {
                         min_dist = dist;
                         best_c = j;
@@ -67,4 +72,4 @@ public:
     }
 };
 
-}
+} // namespace GraphDatabase::Algorithm

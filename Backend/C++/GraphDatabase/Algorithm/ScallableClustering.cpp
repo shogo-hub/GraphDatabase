@@ -11,9 +11,7 @@
 #include <faiss/VectorTransform.h>
 #include <faiss/impl/AuxIndexStructures.h>
 
-#include "CentroidManager/CentroidManagerFactory.h"
 #include "CentroidManager/ICentroidManager.h"
-#include "CentroidManager/ClusteringTypes.h"
 
 #include <chrono>
 #include <cinttypes>
@@ -31,9 +29,6 @@
 #include <faiss/utils/utils.h>
 
 namespace faiss {
-// TODO : Will search for what is overload constructor is used or not.(If no needed , remove this)
-Clustering::Clustering(int d, int k) : d(d), k(k) {}
-
 // Constructor Injection: Receive the manager from outside
 Clustering::Clustering(int d, int k, const ClusteringParameters& cp, 
                        std::shared_ptr<GraphDatabase::Algorithm::ICentroidManager> manager)
@@ -255,7 +250,7 @@ void Clustering::train_encoded(
     std::unique_ptr<idx_t[]> assign(new idx_t[nx]);
     std::unique_ptr<float[]> dis(new float[nx]);
 
-    // remember best iteration for redo
+    // Remember best iteration for redo
     bool lower_is_better = !is_similarity_metric(index.metric_type);
     float best_obj = lower_is_better ? HUGE_VALF : -HUGE_VALF;
     std::vector<ClusteringIterationStats> best_iteration_stats;
@@ -287,15 +282,7 @@ void Clustering::train_encoded(
     // temporary buffer to decode vectors during the optimization
     std::vector<float> decode_buffer(codec ? d * decode_block_size : 0);
 
-    // Provide a fallback if centroidManager was not injected in constructor (optional safe-guard)
-    if (!this->centroidManager) {
-        // Default to K-Means if not provided
-        this->centroidManager = GraphDatabase::Algorithm::CentroidManagerFactory::create(
-            GraphDatabase::Algorithm::ClusteringType::K_Means, d, k, *this
-        );
-    }
-
-    // Itaration of Cluster configuration(from centroid picking)
+    // Outer loop: Try different initializations (redos) to avoid local optima.
     for (int redo = 0; redo < nredo; redo++) {
         if (verbose && nredo > 1) {
             printf("Configuring cluster  %d / %d\n" , redo, nredo);
@@ -365,7 +352,7 @@ void Clustering::train_encoded(
 
         index.add(k, centroids.data());
 
-        // Implement clustering configuration with vector niter times
+        // Inner loop: Iterative refinement of centroids (Lloyd's algorithm) for 'niter' steps.
         float obj = 0;
         for (int i = 0; i < niter; i++) {
             double t0s = getmillisecs();
