@@ -24,18 +24,12 @@ public:
         const float* weights) override;
 
 private:
-    // Helper functionality internally used
     int split_clusters(
         size_t d,
         size_t k,
         size_t n,
         size_t k_frozen,
         float* hassign,
-        float* centroids);
-
-    void post_process_centroids(
-        size_t k,
-        size_t d,
         float* centroids);
 };
 

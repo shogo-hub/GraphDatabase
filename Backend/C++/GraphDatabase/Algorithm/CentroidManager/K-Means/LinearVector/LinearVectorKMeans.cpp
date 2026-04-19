@@ -3,9 +3,8 @@
 #include <omp.h>
 #include <cassert>
 #include <vector>
-#include <cmath>
 #include <faiss/impl/FaissAssert.h>
-#include <faiss/utils/utils.h> 
+#include <faiss/utils/utils.h>
 #include <faiss/utils/random.h>
 #include <faiss/Index.h>
 
@@ -105,31 +104,9 @@ int LinearVectorKMeans::updateCentroids(
     }
 
     // --- Split Clusters ---
-    // Note: split_clusters receives the original k but also k_frozen to adjust internally?
-    
-    // We pass original K and Centroid start pointer because split_clusters expects to handle adjustments internally
-    // or we can refactor split_clusters to work on active only.
-    // Based on existing split_clusters implementation at bottom:
-    // k -= k_frozen; centroids += k_frozen * d;
-    // So it expects Full K and Full Centroid Pointer.
-    
-    // BUT we adjusted local k and centroids at the top of this function:
-    // k -= k_frozen;
-    // centroids += k_frozen * d;
-    
-    // So to pass "Full K" we use (k + k_frozen).
-    // To pass "Full Centroid Pointer", we use (centroids - k_frozen * d).
-    
+    // split_clusters internally re-adjusts for k_frozen, so restore
+    // the original k and centroids pointer before passing.
     int nsplit = split_clusters(d, k + k_frozen, n, k_frozen, hassign, centroids - k_frozen * d);
-
-    // --- Post Process ---
-    // Pass adjusted k and centroids?
-    // post_process usually acts on all centroids? Or just active ones?
-    // The snippet: post_process_centroids(size_t d, size_t k, float* centroids...)
-    // Likely we only process the ones we updated? Or all?
-    // User snippet implementation doesn't check k_frozen.
-    // So pass the calculated active range.
-    post_process_centroids(k, d, centroids);
 
     return nsplit;
 }
@@ -175,17 +152,6 @@ int LinearVectorKMeans::split_clusters(
         }
     }
     return nsplit;
-}
-
-void LinearVectorKMeans::post_process_centroids(size_t k, size_t d, float* centroids) {
-    if (options.spherical) {
-        faiss::fvec_renorm_L2(d, k, centroids);
-    }
-    if (options.int_centroids) {
-        for (size_t i = 0; i < d * k; i++) {
-            centroids[i] = roundf(centroids[i]);
-        }
-    }
 }
 
 }

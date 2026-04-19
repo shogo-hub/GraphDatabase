@@ -21,7 +21,9 @@
 
 #include <omp.h>
 
+#include <stdexcept>
 #include <faiss/IndexFlat.h>
+#include "CentroidManager/CentroidManagerFactory.h"
 #include <faiss/impl/FaissAssert.h>
 #include <faiss/impl/kmeans1d.h>
 #include <faiss/utils/distances.h>
@@ -32,7 +34,11 @@ namespace faiss {
 // Constructor Injection: Receive the manager from outside
 Clustering::Clustering(int d, int k, const ClusteringParameters& cp, 
                        std::shared_ptr<GraphDatabase::Algorithm::ICentroidManager> manager)
-        : ClusteringParameters(cp), d(d), k(k), centroidManager(manager) {}
+        : ClusteringParameters(cp), d(d), k(k), centroidManager(manager) {
+    if (!this->centroidManager) {
+        throw std::invalid_argument("CentroidManager cannot be null");
+    }
+}
 
 void Clustering::post_process_centroids() {
     if (spherical) {
@@ -433,7 +439,7 @@ void Clustering::train_encoded(
                 fflush(stdout);
             }
 
-            // post_process_centroids();
+            post_process_centroids();
 
             // add centroids to index for the next iteration (or for output)
 
@@ -486,10 +492,27 @@ void Clustering::train_encoded(
     }
 }
 
-Clustering1D::Clustering1D(int k) : Clustering(1, k) {}
+static std::shared_ptr<GraphDatabase::Algorithm::ICentroidManager>
+/**
+ * @brief Create the default centroid manager used by clustering routines.
+ *
+ * This helper constructs a K-means based centroid manager configured with
+ * default options and the L2 metric.
+ *
+ * @return Shared pointer to a configured ICentroidManager instance.
+ */
+makeDefaultKMeansManager() {
+    return GraphDatabase::Algorithm::CentroidManagerFactory::create(
+        GraphDatabase::Algorithm::ClusteringAlgorithmType::K_MEANS,
+        GraphDatabase::Algorithm::CentroidManagerOptions{},
+        faiss::METRIC_L2);
+}
+
+Clustering1D::Clustering1D(int k)
+        : Clustering(1, k, ClusteringParameters{}, makeDefaultKMeansManager()) {}
 
 Clustering1D::Clustering1D(int k, const ClusteringParameters& cp)
-        : Clustering(1, k, cp) {}
+        : Clustering(1, k, cp, makeDefaultKMeansManager()) {}
 
 void Clustering1D::train_exact(idx_t n, const float* x) {
     const float* xt = x;
@@ -523,7 +546,7 @@ float kmeans_clustering(
         size_t k,
         const float* x,
         float* centroids) {
-    Clustering clus(d, k);
+    Clustering clus(d, k, ClusteringParameters{}, makeDefaultKMeansManager());
     clus.verbose = d * n * k > (size_t(1) << 30);
     // display logs if > 1Gflop per iteration
     IndexFlatL2 index(d);
@@ -598,7 +621,7 @@ void ProgressiveDimClustering::train(
         }
         std::unique_ptr<Index> clustering_index(factory(di));
 
-        Clustering clus(di, k, *this);
+        Clustering clus(di, k, *this, makeDefaultKMeansManager());
         if (d_prev > 0) {
             // copy warm-start centroids (padded with 0s)
             clus.centroids.resize(k * di);

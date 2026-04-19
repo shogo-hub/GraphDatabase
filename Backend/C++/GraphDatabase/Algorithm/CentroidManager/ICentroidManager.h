@@ -13,6 +13,10 @@ public:
     virtual ~ICentroidManager() = default;
 
     // Assignment Step
+    // TODO: Currently unused — Clustering::train_encoded() uses index.search() (SIMD path) for assignment.
+    // This method is kept for a future refactor where index.search() is replaced with a
+    // pluggable assignment step (separate branch). At that point, Clustering::train_encoded()
+    // should call centroidManager->findClosestCentroids() instead of index.search().
     virtual void findClosestCentroids(
         size_t n,
         size_t k,
