@@ -1,7 +1,8 @@
-/**
- * Enum for concrete clustering class 
- * **/
 #pragma once
+
+/**
+ * Enum for concrete clustering class
+ **/
 
 #include <cstddef>
 
