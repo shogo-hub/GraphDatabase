@@ -10,7 +10,7 @@
 
 namespace GraphDatabase::Algorithm {
 
-#define EPS (1 / 1024.)
+constexpr float EPS = 1.0f / 1024.0f;
 
 int LinearVectorKMeans::updateCentroids(
     size_t n, 
@@ -48,18 +48,10 @@ int LinearVectorKMeans::updateCentroids(
 
         for (size_t i = 0; i < n; i++) {
             int64_t ci = assignments[i];
-            // Adjust index relative to non-frozen part
-            // Note: assignments are global indices [0, k_original-1]
-            // We need to check if ci falls into the active range [k_frozen, k_original)
-            // But verify: Does Faiss re-index or just mask?
-            // The original code says:
-            // int64_t ci = assign[i];
-            // assert(ci >= 0 && ci < k + k_frozen);
-            // ci -= k_frozen;
-            // if (ci >= c0 && ci < c1) ...
-            
-            // So yes, we assume assignments are absolute indices.
-            
+            FAISS_THROW_IF_NOT_MSG(
+                ci >= 0 && ci < (int64_t)(k + k_frozen),
+                "invalid assignment index: out of range");
+
             if (ci >= (int64_t)k_frozen) {
                 int64_t ci_active = ci - k_frozen;
                 
