@@ -4,6 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using System;
+using Backend.Dotnet.Application;
+using Backend.Dotnet.Controllers;
+
+using Backend.Dotnet.Common.Errors;
 
 namespace Backend.Dotnet;
 
@@ -34,19 +38,23 @@ internal static class BackendDetailSetting
         services
             .AddApplication()
             .AddControllers(configuration)
-            .AddDatabase(configuration)
-            .AddInitialization();
+            .AddErrors(opt => {
+                // Configure error handling options if needed
+            });
+        
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
     }
 
     public static void Configure(WebApplication app)
     {
         app.UseRouting();
-        app.UseHealthChecks(HealthController.GetPath);
-        app.MapOpenApi(OpenApiController.GetPath);
-        app.UseSwaggerUI(opt =>
-        {
-            opt.SwaggerEndpoint(OpenApiController.GetPath, OpenApiController.GetPath);
-        });
+        //app.UseHealthChecks(HealthController.GetPath);
+        //app.MapOpenApi(OpenApiController.GetPath);
+        // app.UseSwaggerUI(opt =>
+        // {
+        //     opt.SwaggerEndpoint(OpenApiController.GetPath, OpenApiController.GetPath);
+        // });
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
